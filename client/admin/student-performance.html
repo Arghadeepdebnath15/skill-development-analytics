@@ -1,53 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analytics Dashboard | Sharda University</title>
+    <title>SaaS Analytics | Sharda University</title>
     <link rel="stylesheet" href="../shared/styles.css">
     <link rel="stylesheet" href="admin.css">
     <link rel="stylesheet" href="student-profile.css">
-    <style>
-        /* Cockpit Mode: Force Non-Scrollable Layout */
-        body, .app-wrapper {
-            height: 100vh;
-            overflow: hidden;
-        }
-        .main-container {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        .main-content {
-            flex: 1;
-            padding: 1.5rem 3.5rem;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-        #performanceContent {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-        
-        /* Floating Show Details Button */
-        .details-trigger-container {
-            margin-top: auto;
-            padding: 1rem 0;
-            display: flex;
-            justify-content: center;
-            border-top: 1px solid var(--border);
-        }
-    </style>
 </head>
+
 <body>
     <div class="app-wrapper">
         <!-- Site Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-logo">
-                <img src="https://shardauniversity.com/img/logo-mobile.png" style="height: 40px; filter: brightness(0) invert(1); margin-bottom: 10px; display: block;">
+                <img src="https://shardauniversity.com/img/logo-mobile.png"
+                    style="height: 40px; filter: brightness(0) invert(1); margin-bottom: 10px; display: block;">
                 Sharda Skills
             </div>
             <nav>
@@ -67,17 +36,23 @@
                     <input type="text" placeholder="Global analytic search...">
                 </div>
                 <div style="display: flex; align-items: center; gap: 2rem;">
-                    <a href="students.html" class="btn btn-secondary" style="font-weight: 800; font-size: 0.75rem;">← BACK TO RECORDS</a>
-                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop" class="user-avatar" alt="User">
+                    <a href="students.html" class="btn btn-secondary" style="font-weight: 800; font-size: 0.75rem;">←
+                        BACK TO RECORDS</a>
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop"
+                        class="user-avatar" alt="User">
                 </div>
             </header>
 
             <main class="main-content" id="performanceContent">
-                <!-- Initialized by performance.js -->
+                <!-- Data will be injected here by performance.js -->
+                <div style="text-align: center; padding: 10rem;">
+                    <h2 style="color: var(--primary);">INITIALIZING SAAS PERFORMANCE CLOUD...</h2>
+                </div>
             </main>
         </div>
     </div>
 
     <script type="module" src="performance.js"></script>
 </body>
+
 </html>

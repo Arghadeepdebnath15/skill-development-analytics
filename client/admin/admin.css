@@ -53,6 +53,52 @@
     border-bottom: none;
 }
 
+/* Audit Table Specifics (Sharda Skills Design) */
+.audit-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    font-size: 0.85rem;
+}
+
+.audit-table th {
+    background: #1a237e15;
+    color: #448aff;
+    text-transform: uppercase;
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 1.2rem 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    letter-spacing: 0.5px;
+}
+
+.audit-table td {
+    padding: 1.2rem 1rem;
+    font-weight: 600;
+    color: var(--text-main);
+    transition: background 0.2s ease;
+}
+
+.audit-table tr:hover td {
+    background: rgba(68, 138, 255, 0.05);
+}
+
+.audit-table button {
+    border-radius: 4px;
+    border: 1px solid rgba(68, 138, 255, 0.3);
+    background: transparent;
+    color: #448aff;
+    font-size: 0.65rem;
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.audit-table button:hover {
+    background: #448aff;
+    color: white;
+}
+
 @media (max-width: 1024px) {
     .admin-grid {
         grid-template-columns: 1fr;

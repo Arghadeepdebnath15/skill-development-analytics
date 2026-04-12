@@ -3,7 +3,7 @@ import { STUDENTS, DEPARTMENTS } from './student-data.js';
 let filteredStudents = [...STUDENTS];
 
 function init() {
-    console.log('Initializing Student Management (Table Version)...');
+    console.log('Initializing Student Audit Table...');
     
     if (!STUDENTS || STUDENTS.length === 0) {
         console.error('Critical Error: No student data found.');
@@ -19,62 +19,63 @@ function populateDeptFilter() {
     const filter = document.getElementById('deptFilter');
     if (!filter) return;
     
-    // Clear and re-populate
-    filter.innerHTML = '<option value="">All Departments</option>' + 
+    filter.innerHTML = '<option value="">All schools</option>' + 
         DEPARTMENTS.map(d => `<option value="${d}">${d}</option>`).join('');
 }
 
 function renderStudentTable(students) {
     const tableBody = document.getElementById('studentTableBody');
-    const countBadge = document.getElementById('studentCount');
+    const studentCount = document.getElementById('studentCount');
+    const avgGd = document.getElementById('avgGd');
+    const avgMip = document.getElementById('avgMip');
+    const avgLsrw = document.getElementById('avgLsrw');
     
-    if (!tableBody) {
-        console.error('Table body element "studentTableBody" not found.');
-        return;
-    }
+    if (!tableBody) return;
 
-    // Update count
-    if (countBadge) {
-        countBadge.innerText = `${students.length} TOTAL STUDENTS`;
+    // Update Stats Summary
+    if (studentCount) studentCount.innerText = students.length;
+    
+    if (students.length > 0) {
+        const totalGd = students.reduce((acc, s) => acc + s.gd, 0);
+        const totalMip = students.reduce((acc, s) => acc + s.mip, 0);
+        const totalLsrw = students.reduce((acc, s) => acc + (s.va + s.qa + s.lr) / 3, 0);
+        
+        if (avgGd) avgGd.innerText = (totalGd / students.length).toFixed(1);
+        if (avgMip) avgMip.innerText = (totalMip / students.length).toFixed(1);
+        if (avgLsrw) avgLsrw.innerText = (totalLsrw / students.length).toFixed(1);
     }
 
     if (students.length === 0) {
-        tableBody.innerHTML = `
-            <tr>
-                <td colspan="4" style="text-align: center; padding: 3rem; color: var(--text-muted);">
-                    No students matching the criteria were found.
-                </td>
-            </tr>
-        `;
+        tableBody.innerHTML = `<tr><td colspan="14" style="text-align: center; padding: 3rem; color: var(--text-muted);">No matching students.</td></tr>`;
         return;
     }
 
+    // Helper for coloring scores
+    const getScoreColor = (val, max) => {
+        if (val === 0) return '#ff5252'; // Red for Zero
+        if (val > (max * 0.7)) return '#4caf50'; // Green for High
+        return '#ffcf2a'; // Yellow for mid
+    };
+
     // Render Rows
     tableBody.innerHTML = students.map((s, idx) => `
-        <tr class="anim-row" style="animation-delay: ${idx * 0.02}s">
+        <tr class="anim-row" style="animation-delay: ${idx * 0.02}s; border-bottom: 1px solid rgba(255,255,255,0.05);">
+            <td style="color: var(--text-muted); font-size: 0.8rem;">${s.id}</td>
+            <td style="font-weight: 800; color: white;">${s.name}</td>
+            <td style="color: var(--text-muted); font-size: 0.8rem;">${s.school}</td>
+            <td style="color: var(--text-muted); font-size: 0.8rem;">${s.section}</td>
+            <td style="font-weight: 900; color: ${getScoreColor(s.resume, 10)}">${s.resume}</td>
+            <td style="font-weight: 900; color: ${getScoreColor(s.gd, 40)}">${s.gd}</td>
+            <td style="font-weight: 900; color: ${getScoreColor(s.mip, 40)}">${s.mip}</td>
+            <td style="font-weight: 900; color: ${getScoreColor(s.wt1, 20)}">${s.wt1}</td>
+            <td style="font-weight: 900; color: ${getScoreColor(s.wt2, 20)}">${s.wt2}</td>
+            <td style="font-weight: 900; color: ${getScoreColor(s.wt3, 20)}">${s.wt3}</td>
+            <td style="font-weight: 900; color: ${getScoreColor(s.va, 50)}">${s.va}</td>
+            <td style="font-weight: 900; color: ${getScoreColor(s.qa, 50)}">${s.qa}</td>
+            <td style="font-weight: 900; color: ${getScoreColor(s.lr, 50)}">${s.lr}</td>
             <td>
-                <div style="display: flex; align-items: center; gap: 12px;">
-                    <img src="${s.profileImage}" style="width: 40px; height: 40px; border-radius: 10px; border: 2px solid var(--bg-main);">
-                    <div>
-                        <div style="font-weight: 800; color: var(--primary); font-size: 0.95rem;">${s.name}</div>
-                        <div style="font-size: 0.75rem; color: var(--text-muted);">${s.email}</div>
-                    </div>
-                </div>
-            </td>
-            <td>
-                <span class="badge" style="background: var(--bg-main); color: var(--primary); font-weight: 700;">${s.department}</span>
-            </td>
-            <td>
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <div style="width: 40px; height: 6px; background: #eee; border-radius: 3px; overflow: hidden;">
-                        <div style="width: ${s.gpa * 25}%; height: 100%; background: var(--primary-light);"></div>
-                    </div>
-                    <span style="font-weight: 900; color: var(--primary); font-size: 1.1rem;">${s.gpa}</span>
-                </div>
-            </td>
-            <td>
-                <button class="btn btn-secondary" onclick="window.showPerformance('${s.id}')" style="font-size: 0.75rem; font-weight: 800; padding: 10px 20px;">
-                    VIEW ANALYTICS ›
+                <button class="btn btn-secondary" onclick="window.showPerformance('${s.id}')" style="font-size: 0.65rem; font-weight: 800; padding: 6px 12px; background: transparent; border: 1px solid var(--primary-light); color: white;">
+                    VIEW ›
                 </button>
             </td>
         </tr>
@@ -87,26 +88,25 @@ window.showPerformance = (id) => {
 
 function setupFilters() {
     const search = document.getElementById('globalSearch');
-    const dept = document.getElementById('deptFilter');
+    const school = document.getElementById('deptFilter');
 
-    if (!search || !dept) return;
+    if (!search || !school) return;
 
     const filterHandler = () => {
         const searchTerm = search.value.toLowerCase();
-        const deptTerm = dept.value;
+        const schoolTerm = school.value;
 
         filteredStudents = STUDENTS.filter(s => {
-            const matchesSearch = s.name.toLowerCase().includes(searchTerm) || 
-                                 s.id.toLowerCase().includes(searchTerm);
-            const matchesDept = deptTerm === "" || s.department === deptTerm;
-            return matchesSearch && matchesDept;
+            const matchesSearch = s.name.toLowerCase().includes(searchTerm) || s.id.toLowerCase().includes(searchTerm);
+            const matchesSchool = schoolTerm === "" || s.school === schoolTerm;
+            return matchesSearch && matchesSchool;
         });
 
         renderStudentTable(filteredStudents);
     };
 
     search.oninput = filterHandler;
-    dept.onchange = filterHandler;
+    school.onchange = filterHandler;
 }
 
 init();

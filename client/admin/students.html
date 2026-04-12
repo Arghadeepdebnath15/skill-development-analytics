@@ -30,30 +30,51 @@
             <header class="top-header">
                 <div class="search-bar">
                     <span>🔍</span>
-                    <input type="text" id="globalSearch" placeholder="Filter by name, ID, or department...">
+                    <input type="text" id="globalSearch" placeholder="Enter name...">
                 </div>
-                <div style="display: flex; align-items: center; gap: 2rem;">
-                    <select id="deptFilter" style="background: var(--bg-main); border: 1px solid var(--border); padding: 8px 16px; border-radius: 12px; font-weight: 700;">
-                        <option value="all">All Departments</option>
-                    </select>
-                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop" class="user-avatar" alt="User">
+                <div style="display: flex; gap: 2rem;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 0.7rem; font-weight: 800; color: var(--text-muted);">SCHOOL</span>
+                        <select id="deptFilter" style="background: #222e50; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; font-size: 0.75rem;"></select>
+                    </div>
                 </div>
             </header>
 
             <main class="main-content">
                 <div class="flex-between mb-1">
-                    <h1 style="font-size: 1.8rem; font-weight: 800;">Academic Records Management</h1>
-                    <span id="studentCount" class="badge" style="background: var(--primary); color: white;">125 TOTAL STUDENTS</span>
+                    <h1 style="font-size: 1.8rem; font-weight: 900; color: var(--primary);">Student Audit</h1>
+                    <div style="text-align: right;">
+                        <div style="font-size: 0.8rem; font-weight: 800; color: var(--text-muted);">B.TECH 6TH SEMESTER</div>
+                        <div style="font-size: 0.6rem; font-weight: 700; color: var(--text-muted);">SKILLS ASSESSMENT & AUDIT</div>
+                    </div>
                 </div>
 
-                <div class="table-container card">
-                    <table>
-                        <thead>
+                <!-- Audit Summary Bar -->
+                <div id="auditSummary" style="background: #151e3d; padding: 1.5rem 2rem; border-radius: 12px; margin-bottom: 2rem; display: flex; gap: 4rem; align-items: center; border: 1px solid rgba(255,255,255,0.05);">
+                    <div style="color: #448aff; font-weight: 800; font-size: 0.85rem;">Total Students: <span id="studentCount" style="color: white;">0</span></div>
+                    <div style="color: #448aff; font-weight: 800; font-size: 0.85rem;">Avg GD: <span id="avgGd" style="color: #ffcf2a;">0.0</span></div>
+                    <div style="color: #448aff; font-weight: 800; font-size: 0.85rem;">Avg MIP: <span id="avgMip" style="color: #ffcf2a;">0.0</span></div>
+                    <div style="color: #448aff; font-weight: 800; font-size: 0.85rem;">Avg LSRW: <span id="avgLsrw" style="color: #4caf50;">0.0</span></div>
+                </div>
+
+                <div class="table-container card p-0" style="background: transparent; border: none; box-shadow: none;">
+                    <table class="audit-table">
+                        <thead style="background: #1a237e10;">
                             <tr>
-                                <th>Student Identity</th>
-                                <th>Department</th>
-                                <th>Cumulative GPA</th>
-                                <th>Performance Action</th>
+                                <th>ID</th>
+                                <th>NAME</th>
+                                <th>SCHOOL</th>
+                                <th>SECTION</th>
+                                <th>RESUME</th>
+                                <th>GD</th>
+                                <th>MIP</th>
+                                <th>WT1</th>
+                                <th>WT2</th>
+                                <th>WT3</th>
+                                <th>VA</th>
+                                <th>QA</th>
+                                <th>LR</th>
+                                <th>ACTIONS</th>
                             </tr>
                         </thead>
                         <tbody id="studentTableBody">
