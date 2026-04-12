@@ -3,7 +3,7 @@ import { STUDENTS, DEPARTMENTS } from './student-data.js';
 let filteredStudents = [...STUDENTS];
 
 function init() {
-    console.log('Initializing Student Audit Table...');
+    console.log('Initializing Modern Student Audit...');
     
     if (!STUDENTS || STUDENTS.length === 0) {
         console.error('Critical Error: No student data found.');
@@ -46,36 +46,40 @@ function renderStudentTable(students) {
     }
 
     if (students.length === 0) {
-        tableBody.innerHTML = `<tr><td colspan="14" style="text-align: center; padding: 3rem; color: var(--text-muted);">No matching students.</td></tr>`;
+        tableBody.innerHTML = `<tr><td colspan="14" style="text-align: center; padding: 4rem; color: #9ca3af; font-weight: 800;">No students found matching your criteria.</td></tr>`;
         return;
     }
 
-    // Helper for coloring scores
+    // Modern Score Coloring (Vibrant)
     const getScoreColor = (val, max) => {
-        if (val === 0) return '#ff5252'; // Red for Zero
-        if (val > (max * 0.7)) return '#4caf50'; // Green for High
-        return '#ffcf2a'; // Yellow for mid
+        if (val === 0) return '#ef4444'; // Bright Red
+        if (val > (max * 0.7)) return '#22c55e'; // Vibrant Green
+        if (val > (max * 0.4)) return '#f59e0b'; // Amber
+        return '#f87171'; // Soft Red
     };
 
     // Render Rows
     tableBody.innerHTML = students.map((s, idx) => `
-        <tr class="anim-row" style="animation-delay: ${idx * 0.02}s; border-bottom: 1px solid rgba(255,255,255,0.05);">
-            <td style="color: var(--text-muted); font-size: 0.8rem;">${s.id}</td>
-            <td style="font-weight: 800; color: white;">${s.name}</td>
-            <td style="color: var(--text-muted); font-size: 0.8rem;">${s.school}</td>
-            <td style="color: var(--text-muted); font-size: 0.8rem;">${s.section}</td>
-            <td style="font-weight: 900; color: ${getScoreColor(s.resume, 10)}">${s.resume}</td>
-            <td style="font-weight: 900; color: ${getScoreColor(s.gd, 40)}">${s.gd}</td>
-            <td style="font-weight: 900; color: ${getScoreColor(s.mip, 40)}">${s.mip}</td>
-            <td style="font-weight: 900; color: ${getScoreColor(s.wt1, 20)}">${s.wt1}</td>
-            <td style="font-weight: 900; color: ${getScoreColor(s.wt2, 20)}">${s.wt2}</td>
-            <td style="font-weight: 900; color: ${getScoreColor(s.wt3, 20)}">${s.wt3}</td>
-            <td style="font-weight: 900; color: ${getScoreColor(s.va, 50)}">${s.va}</td>
-            <td style="font-weight: 900; color: ${getScoreColor(s.qa, 50)}">${s.qa}</td>
-            <td style="font-weight: 900; color: ${getScoreColor(s.lr, 50)}">${s.lr}</td>
+        <tr class="anim-row" style="animation-delay: ${idx * 0.01}s">
+            <td style="color: #9ca3af; font-weight: 700; font-size: 0.75rem;">#${s.id}</td>
             <td>
-                <button class="btn btn-secondary" onclick="window.showPerformance('${s.id}')" style="font-size: 0.65rem; font-weight: 800; padding: 6px 12px; background: transparent; border: 1px solid var(--primary-light); color: white;">
-                    VIEW ›
+                <div class="student-name">${s.name}</div>
+                <div style="font-size: 0.65rem; color: #9ca3af; font-weight: 600;">${s.email}</div>
+            </td>
+            <td style="color: #6b7280; font-weight: 700;">${s.school}</td>
+            <td style="color: #6b7280; font-weight: 700;">${s.section}</td>
+            <td class="score-value" style="color: ${getScoreColor(s.resume, 10)}">${s.resume}</td>
+            <td class="score-value" style="color: ${getScoreColor(s.gd, 40)}">${s.gd}</td>
+            <td class="score-value" style="color: ${getScoreColor(s.mip, 40)}">${s.mip}</td>
+            <td class="score-value" style="color: ${getScoreColor(s.wt1, 20)}">${s.wt1}</td>
+            <td class="score-value" style="color: ${getScoreColor(s.wt2, 20)}">${s.wt2}</td>
+            <td class="score-value" style="color: ${getScoreColor(s.wt3, 20)}">${s.wt3}</td>
+            <td class="score-value" style="color: ${getScoreColor(s.va, 50)}">${s.va}</td>
+            <td class="score-value" style="color: ${getScoreColor(s.qa, 50)}">${s.qa}</td>
+            <td class="score-value" style="color: ${getScoreColor(s.lr, 50)}">${s.lr}</td>
+            <td>
+                <button class="btn-view" onclick="window.showPerformance('${s.id}')">
+                    Analyze
                 </button>
             </td>
         </tr>
@@ -88,13 +92,13 @@ window.showPerformance = (id) => {
 
 function setupFilters() {
     const search = document.getElementById('globalSearch');
-    const school = document.getElementById('deptFilter');
+    const schoolFilter = document.getElementById('deptFilter');
 
-    if (!search || !school) return;
+    if (!search || !schoolFilter) return;
 
     const filterHandler = () => {
         const searchTerm = search.value.toLowerCase();
-        const schoolTerm = school.value;
+        const schoolTerm = schoolFilter.value;
 
         filteredStudents = STUDENTS.filter(s => {
             const matchesSearch = s.name.toLowerCase().includes(searchTerm) || s.id.toLowerCase().includes(searchTerm);
@@ -106,7 +110,7 @@ function setupFilters() {
     };
 
     search.oninput = filterHandler;
-    school.onchange = filterHandler;
+    schoolFilter.onchange = filterHandler;
 }
 
 init();
