@@ -30,6 +30,9 @@ const generateStudents = () => {
         const va = Math.floor(Math.random() * 50);
         const qa = Math.floor(Math.random() * 50);
         const lr = Math.floor(Math.random() * 50);
+        const commOral = Math.floor(Math.random() * 20 + 30); // 30-50
+        const commWritten = Math.floor(Math.random() * 20 + 30);
+        const basicEng = Math.floor(Math.random() * 10 + 40); // 40-50
         
         const gpa = (Math.random() * 1.5 + 2.5).toFixed(2);
         const attendance = Math.floor(Math.random() * 25 + 75);
@@ -58,7 +61,14 @@ const generateStudents = () => {
             school,
             section,
             resume,
-            resumeHistory,
+            attendance,
+            gpa,
+            va,
+            qa,
+            lr,
+            commOral,
+            commWritten,
+            basicEng,
             gd,
             mip,
             gdVideo: 'https://www.w3schools.com/html/mov_bbb.mp4',
@@ -69,21 +79,29 @@ const generateStudents = () => {
                 { name: 'Group Coordination', score: Math.floor(Math.random() * 4 + 5) },
                 { name: 'Body Language', score: Math.floor(Math.random() * 3 + 7) }
             ],
+            previousGdDetails: [
+                { name: 'Topic Knowledge', score: 6 },
+                { name: 'Communication', score: 5 },
+                { name: 'Group Coordination', score: 5 },
+                { name: 'Body Language', score: 6 }
+            ],
             mipDetails: [
                 { name: 'Subject Expertise', score: Math.floor(Math.random() * 3 + 7) },
                 { name: 'Confidence', score: Math.floor(Math.random() * 3 + 6) },
                 { name: 'Problem Solving', score: Math.floor(Math.random() * 4 + 5) },
                 { name: 'Dress Code', score: 9 }
             ],
+            previousMipDetails: [
+                { name: 'Subject Expertise', score: 6 },
+                { name: 'Confidence', score: 5 },
+                { name: 'Problem Solving', score: 4 },
+                { name: 'Dress Code', score: 8 }
+            ],
             wt1,
             wt2,
             wt3,
-            va,
-            qa,
-            lr,
-            gpa,
-            attendance,
             progression,
+            resumeHistory,
             profileImage: `https://i.pravatar.cc/150?u=${id}`,
             skills: [
                 { name: 'Analytics', level: 85 },
