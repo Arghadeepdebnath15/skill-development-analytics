@@ -15,7 +15,7 @@
     "mongoose": "^7.6.3"
   },
   "devDependencies": {
-    "vite": "^5.0.0",
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "vite": "^8.0.8"
   }
 }
