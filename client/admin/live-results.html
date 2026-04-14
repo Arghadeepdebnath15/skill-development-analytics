@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Monitoring | Sharda Skills</title>
+    <link rel="stylesheet" href="../shared/styles.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <div class="app-wrapper">
+        <!-- Sidebar (Sync with Hub) -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <div style="background: white; padding: 6px; border-radius: 12px; display: flex; align-items: center; justify-content: center; width: 48px; height: 48px;">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRanoTorq6EsCL3aZtGb3-G-s5OVlgNnN4stg&s" style="max-width: 100%; height: auto; border-radius: 4px;">
+                </div>
+                <div>
+                   <div style="font-size: 1.2rem; line-height: 1; font-weight: 800;">SHARDA</div>
+                   <div style="font-size: 0.7rem; opacity: 0.5; letter-spacing: 2px; font-weight: 700;">SKILLS</div>
+                </div>
+            </div>
+            <nav style="flex: 1;">
+                <a href="quizzes.html" class="sidebar-link active"><span>📝</span> Assessment Hub</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-container">
+            <div class="main-content">
+            <header class="flex-between mb-4">
+                <div>
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 0.5rem;">
+                         <span class="quiz-badge badge-live">● LIVE SESSION</span>
+                         <h1 style="font-size: 2.2rem; font-weight: 950; color: #1a237e; margin: 0; letter-spacing: -1.5px;">Institutional Logic Assessment</h1>
+                    </div>
+                    <p style="color: #94a3b8; font-weight: 700;">Watching student performance in real-time. Submissions are auto-grading.</p>
+                </div>
+                <div style="text-align: right;">
+                    <button class="btn btn-primary" style="background: #ef4444; border: none; box-shadow: 0 10px 20px rgba(239, 68, 68, 0.2);">END ASSESSMENT</button>
+                    <div style="margin-top: 10px; font-size: 0.7rem; font-weight: 800; color: #94a3b8;">SESSION ID: QZ-8822-X</div>
+                </div>
+            </header>
+
+            <!-- Live Stat Grid -->
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 2.5rem;">
+                <div class="stat-mini-card">
+                    <small>PARTICIPATION</small>
+                    <div class="stat-val" id="totalParticipants">142</div>
+                </div>
+                <div class="stat-mini-card">
+                    <small>MEAN SCORE</small>
+                    <div class="stat-val">76.4%</div>
+                </div>
+                <div class="stat-mini-card">
+                    <small>TIME REMAINING</small>
+                    <div class="stat-val" style="color: #ef4444;">14:22</div>
+                </div>
+            </div>
+
+            <!-- Score Feed -->
+            <div class="elite-table-wrapper" style="border-radius: 20px;">
+                <table class="audit-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 250px;">STUDENT</th>
+                            <th>PROGRESS</th>
+                            <th>ACCURACY</th>
+                            <th>STATUS</th>
+                            <th style="text-align: right;">TIME SPENT</th>
+                        </tr>
+                    </thead>
+                    <tbody id="scoreFeed">
+                        <!-- Data injected by JS -->
+                    </tbody>
+                </table>
+            </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module">
+        import { LIVE_SCORES } from './quiz-data.js';
+
+        const feed = document.getElementById('scoreFeed');
+        const participantsEl = document.getElementById('totalParticipants');
+        
+        function updateTable() {
+            // Merge static demo data with dynamic localStorage submissions
+            const dynamicResults = JSON.parse(localStorage.getItem('quiz_results') || '[]');
+            const allScores = [...dynamicResults, ...LIVE_SCORES];
+            
+            participantsEl.innerText = allScores.length;
+
+            feed.innerHTML = allScores.map(s => `
+                <tr class="anim-row">
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <img src="https://ui-avatars.com/api/?name=${s.studentName}&background=random" style="width: 28px; height: 28px; border-radius: 8px;">
+                            <div>
+                                <div style="font-weight: 900; font-size: 0.9rem; color: #1a237e;">${s.studentName}</div>
+                                <div style="font-size: 0.65rem; color: #94a3b8; font-weight: 700;">${s.studentId || 'EXTERNAL'}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div style="width: 100px; height: 6px; background: #f1f5f9; border-radius: 10px; overflow: hidden;">
+                            <div style="width: ${s.progress}%; height: 100%; background: var(--primary); transition: width 0.5s ease;"></div>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="score-pill ${s.score >= 80 ? 'pill-high' : s.score >= 50 ? 'pill-mid' : 'pill-low'}">
+                            ${s.score !== null ? s.score + '%' : 'Pending'}
+                        </span>
+                    </td>
+                    <td>
+                        <span style="font-size: 0.7rem; font-weight: 800; color: ${s.status === 'completed' ? 'var(--success)' : 'var(--primary-light)'}">
+                            ● ${s.status.toUpperCase()}
+                        </span>
+                    </td>
+                    <td style="text-align: right; font-weight: 800; color: #64748b;">
+                        Live Now
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        updateTable();
+        // Simulation & Real Sync: Add a random update and check localStorage
+        setInterval(() => {
+            const ongoing = LIVE_SCORES.find(s => s.status === 'ongoing');
+            if (ongoing) {
+                ongoing.progress = Math.min(100, ongoing.progress + 2);
+                if (ongoing.progress === 100) {
+                    ongoing.status = 'completed';
+                    ongoing.score = 75 + Math.floor(Math.random() * 20);
+                }
+            }
+            updateTable();
+        }, 3000);
+    </script>
+</body>
+</html>

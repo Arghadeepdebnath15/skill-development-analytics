@@ -10,19 +10,52 @@
 </head>
 <body>
     <div class="app-wrapper">
-        <!-- Unified Sidebar -->
+        <!-- Unified Elite Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-logo">
-                <img src="https://shardauniversity.com/img/logo-mobile.png" style="height: 40px; filter: brightness(0) invert(1); margin-bottom: 10px; display: block;">
-                Sharda Skills
+                <div style="background: white; padding: 6px; border-radius: 12px; display: flex; align-items: center; justify-content: center; width: 48px; height: 48px;">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRanoTorq6EsCL3aZtGb3-G-s5OVlgNnN4stg&s" style="max-width: 100%; height: auto; border-radius: 4px;">
+                </div>
+                <div>
+                   <div style="font-size: 1.2rem; line-height: 1; font-weight: 800;">SHARDA</div>
+                   <div style="font-size: 0.7rem; opacity: 0.5; letter-spacing: 2px; font-weight: 700;">SKILLS</div>
+                </div>
             </div>
-            <nav>
-                <a href="/" class="sidebar-link"><span>🏠</span> Home Portal</a>
-                <a href="/admin/index.html" class="sidebar-link"><span>📈</span> Analytics Hub</a>
-                <a href="/admin/students.html" class="sidebar-link active"><span>👥</span> Student Directory</a>
-                <a href="/student/index.html" class="sidebar-link"><span>👤</span> Personal Records</a>
-                <a href="#" class="sidebar-link"><span>📋</span> Admissions</a>
+            
+            <nav style="flex: 1;">
+                <div class="nav-category">Institutional core</div>
+                <a href="/admin/index.html" class="sidebar-link"><span>📊</span> Analytics Hub</a>
+
+                <div class="nav-category">Management</div>
+                <a href="/admin/students.html" class="sidebar-link active"><span>🎓</span> Student Audit <span class="badge">125</span></a>
+                <a href="#" class="sidebar-link"><span>📁</span> Skill Dossiers</a>
+
+                <div class="nav-category">Analytics deep-dive</div>
+                <a href="#" class="sidebar-link"><span>📡</span> Live Metrics</a>
+                <a href="#" class="sidebar-link"><span>🗺️</span> Skill Map</a>
             </nav>
+
+            <!-- Sidebar Widget -->
+            <div class="sidebar-widget">
+                <div style="font-size: 0.65rem; font-weight: 800; color: rgba(255,255,255,0.4); margin-bottom: 12px; text-transform: uppercase;">Batch Health</div>
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                    <span style="font-size: 0.8rem; font-weight: 800;"><span class="pulse-icon"></span> Optimizing</span>
+                    <span style="font-size: 0.8rem; font-weight: 800; color: var(--success);">94.2%</span>
+                </div>
+                <div style="height: 4px; background: rgba(255,255,255,0.05); border-radius: 2px; overflow: hidden;">
+                    <div style="width: 94%; height: 100%; background: var(--success);"></div>
+                </div>
+            </div>
+
+            <div style="padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.05);">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop" style="width: 36px; height: 36px; border-radius: 10px;">
+                    <div>
+                        <div style="font-size: 0.75rem; font-weight: 800;">Dr. Sarah Chen</div>
+                        <div style="font-size: 0.6rem; color: rgba(255,255,255,0.4); font-weight: 700;">PROVOST ADMIN</div>
+                    </div>
+                </div>
+            </div>
         </aside>
 
         <!-- Main Workspace -->
@@ -30,58 +63,158 @@
             <header class="top-header">
                 <div class="search-bar">
                     <span>🔍</span>
-                    <input type="text" id="globalSearch" placeholder="Enter name...">
+                    <input type="text" id="globalSearch" placeholder="Elite Search (e.g. 'Aamir' or 'SSCSE')...">
                 </div>
-                <div style="display: flex; gap: 2rem;">
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <span style="font-size: 0.7rem; font-weight: 800; color: var(--text-muted);">SCHOOL</span>
-                        <select id="deptFilter" style="background: #222e50; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; font-size: 0.75rem;"></select>
-                    </div>
+                <div style="display: flex; gap: 1rem; align-items: center;">
+                    <select id="deptFilter" class="filter-select"></select>
+                    <select id="tierFilter" class="filter-select">
+                        <option value="">All Tiers</option>
+                        <option value="top">⭐ Top 10% Leaders</option>
+                        <option value="needs-work">⚠️ At Risk</option>
+                        <option value="steady">📊 Steady Progress</option>
+                    </select>
+                    <button id="exportCsv" class="btn btn-secondary elite-btn"><span>📥</span> EXPORT</button>
                 </div>
             </header>
 
             <main class="main-content">
-                <div class="flex-between mb-1">
-                    <h1 style="font-size: 1.8rem; font-weight: 900; color: var(--primary);">Student Audit</h1>
-                    <div style="text-align: right;">
-                        <div style="font-size: 0.8rem; font-weight: 800; color: var(--text-muted);">B.TECH 6TH SEMESTER</div>
-                        <div style="font-size: 0.6rem; font-weight: 700; color: var(--text-muted);">SKILLS ASSESSMENT & AUDIT</div>
+                <div class="flex-between mb-2">
+                    <div>
+                        <h1 style="font-size: 2.22rem; font-weight: 900; color: var(--primary); letter-spacing: -1px;">Audit Compliance Port</h1>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Sharda University • Advanced Analytics Hub • 2026</p>
                     </div>
                 </div>
 
-                <!-- Audit Summary Bar -->
-                <div id="auditSummary" style="background: #151e3d; padding: 1.5rem 2rem; border-radius: 12px; margin-bottom: 2rem; display: flex; gap: 4rem; align-items: center; border: 1px solid rgba(255,255,255,0.05);">
-                    <div style="color: #448aff; font-weight: 800; font-size: 0.85rem;">Total Students: <span id="studentCount" style="color: white;">0</span></div>
-                    <div style="color: #448aff; font-weight: 800; font-size: 0.85rem;">Avg GD: <span id="avgGd" style="color: #ffcf2a;">0.0</span></div>
-                    <div style="color: #448aff; font-weight: 800; font-size: 0.85rem;">Avg MIP: <span id="avgMip" style="color: #ffcf2a;">0.0</span></div>
-                    <div style="color: #448aff; font-weight: 800; font-size: 0.85rem;">Avg LSRW: <span id="avgLsrw" style="color: #4caf50;">0.0</span></div>
+                <!-- Glassmorphic Stat Grid -->
+                <div class="stat-glass-grid">
+                    <div class="glass-card">
+                        <div class="glass-icon" style="background: rgba(68, 138, 255, 0.1); color: #448aff;">👥</div>
+                        <div>
+                            <div class="glass-val" id="studentCount">0</div>
+                            <div class="glass-label">MANAGED RECORDS</div>
+                        </div>
+                    </div>
+                    <div class="glass-card">
+                        <div class="glass-icon" style="background: rgba(255, 207, 42, 0.1); color: #ffcf2a;">📢</div>
+                        <div>
+                            <div class="glass-val" id="avgGd">0.0</div>
+                            <div class="glass-label">AVG GD INDEX</div>
+                        </div>
+                    </div>
+                    <div class="glass-card">
+                        <div class="glass-icon" style="background: rgba(16, 185, 129, 0.1); color: #10b981;">📝</div>
+                        <div>
+                            <div class="glass-val" id="avgMip">0.0</div>
+                            <div class="glass-label">AVG MIP READINESS</div>
+                        </div>
+                    </div>
+                    <div class="glass-card">
+                        <div class="glass-icon" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6;">🧠</div>
+                        <div>
+                            <div class="glass-val" id="avgLsrw">0.0</div>
+                            <div class="glass-label">AVG LSRW SCORE</div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="table-container card p-0" style="background: transparent; border: none; box-shadow: none;">
-                    <table class="audit-table">
-                        <thead style="background: #1a237e10;">
+                <div class="elite-table-wrapper">
+                    <table class="audit-table elite-grid">
+                        <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>NAME</th>
-                                <th>SCHOOL</th>
-                                <th>SECTION</th>
-                                <th>RESUME</th>
-                                <th>GD</th>
-                                <th>MIP</th>
-                                <th>WT1</th>
-                                <th>WT2</th>
-                                <th>WT3</th>
-                                <th>VA</th>
-                                <th>QA</th>
-                                <th>LR</th>
-                                <th>ACTIONS</th>
+                                <th data-sort="id">ID</th>
+                                <th data-sort="name">STUDENT</th>
+                                <th data-sort="school">SCHOOL</th>
+                                <th data-sort="resume">CV</th>
+                                <th data-sort="gd">GD</th>
+                                <th data-sort="mip">MIP</th>
+                                <th data-sort="wt1">T1</th>
+                                <th data-sort="wt2">T2</th>
+                                <th data-sort="wt3">T3</th>
+                                <th data-sort="va">VA</th>
+                                <th data-sort="qa">QA</th>
+                                <th data-sort="lr">LR</th>
+                                <th style="text-align: right;">ACTION</th>
                             </tr>
                         </thead>
                         <tbody id="studentTableBody">
-                            <!-- Populated by JS -->
+                            <!-- Injected by students.js -->
                         </tbody>
                     </table>
                 </div>
+            </main>
+        </div>
+            </main>
+        </div>
+
+        <!-- Quick View Side Drawer -->
+        <div id="quickViewDrawer" class="side-drawer">
+            <div class="drawer-header">
+                <button class="close-drawer" onclick="window.closeQuickView()">&times;</button>
+                <div style="text-align: center;">
+                    <img id="drawerAvatar" src="" style="width: 80px; height: 80px; border-radius: 50%; border: 4px solid var(--primary-light); margin-bottom: 1rem;">
+                    <h2 id="drawerName" style="color: white; font-weight: 900;">Student Name</h2>
+                    <span id="drawerTier" class="badge">TOP PERFORMER</span>
+                </div>
+            </div>
+            <div class="drawer-body">
+                <div class="stats-mini-grid">
+                    <div class="stat-mini-card">
+                        <small>MIP PREP</small>
+                        <div id="drawerMip" class="stat-val">0</div>
+                    </div>
+                    <div class="stat-mini-card">
+                        <small>GD INDEX</small>
+                        <div id="drawerGd" class="stat-val">0</div>
+                    </div>
+                </div>
+
+                <!-- LSRW Analytics Section -->
+                <div class="lsrw-section">
+                    <h4 style="color: #94a3b8; font-size: 0.7rem; letter-spacing: 1px; margin-bottom: 1.2rem; font-weight: 900;">LSRW PERFORMANCE</h4>
+                    <div class="lsrw-container" id="lsrwBars">
+                        <!-- Injected by students.js -->
+                    </div>
+                </div>
+
+                <!-- Comparative Benchmarking Section -->
+                <div style="margin-top: 3rem;">
+                    <h4 style="color: #94a3b8; font-size: 0.7rem; letter-spacing: 1px; margin-bottom: 1.2rem; font-weight: 900;">BATCH COMPARISON (STUDENT VS AVG)</h4>
+                    <div id="comparisonBars" class="comparison-grid">
+                        <!-- Injected by students.js -->
+                    </div>
+                    <div class="bar-legend">
+                        <div style="display: flex; align-items: center; gap: 4px;"><div style="width: 8px; height: 8px; background: #3b82f6; border-radius: 2px;"></div> Student</div>
+                        <div style="display: flex; align-items: center; gap: 4px;"><div style="width: 8px; height: 8px; background: #cbd5e1; border-radius: 2px;"></div> Batch Avg</div>
+                    </div>
+                </div>
+
+                <!-- Soft Skills Radar Section -->
+                <div style="margin-top: 3rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <h4 style="color: #94a3b8; font-size: 0.7rem; letter-spacing: 1px; font-weight: 900;">SOFT SKILLS RADAR</h4>
+                        <span style="font-size: 0.6rem; color: #10b981; font-weight: 900; background: #ecfdf5; padding: 2px 8px; border-radius: 4px;">LIVE INDEX</span>
+                    </div>
+                    <div id="drawerChart" style="height: 200px; display: flex; align-items: center; justify-content: center;">
+                        <!-- SVG Radar Chart injected by students.js -->
+                    </div>
+                </div>
+
+                <!-- Weekly Progress Trend Section -->
+                <div style="margin-top: 3rem;">
+                    <h4 style="color: #94a3b8; font-size: 0.7rem; letter-spacing: 1px; margin-bottom: 1rem; font-weight: 900;">WEEKLY PROGRESS TREND</h4>
+                    <div id="trendChart" class="trend-chart-container">
+                        <!-- SVG Line Graph injected by students.js -->
+                    </div>
+                </div>
+
+                <div style="margin-top: 2rem; padding: 1.5rem; background: #f8fafc; border-radius: 12px; border: 1px solid #eef2f6;">
+                    <h5 style="font-size: 0.7rem; font-weight: 900; color: #1a237e; margin-bottom: 0.5rem;">EXECUTIVE SUMMARY</h5>
+                    <p id="drawerFeedback" style="font-size: 0.75rem; color: #64748b; line-height: 1.6; font-weight: 600;">Loading academic feedback...</p>
+                </div>
+
+                <button id="viewFullDetails" class="btn btn-primary" style="width: 100%; margin-top: 2rem; border-radius: 12px; padding: 14px; font-weight: 800; background: #1a237e;">VIEW FULL DOSSIER ›</button>
+            </div>
+        </div>
             </main>
         </div>
     </div>

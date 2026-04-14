@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Assessment | Sharda Skills</title>
+    <link rel="stylesheet" href="../shared/styles.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body class="main-container">
+
+    <div style="max-width: 900px; margin: 4rem auto; padding: 0 2rem;">
+        <header style="margin-bottom: 3rem;">
+            <a href="quizzes.html" style="text-decoration: none; color: var(--primary); font-weight: 800; font-size: 0.8rem; display: flex; align-items: center; gap: 8px; margin-bottom: 1rem;">
+                ← BACK TO HUB
+            </a>
+            <h1 style="font-size: 2.2rem; font-weight: 950; color: #1a237e; letter-spacing: -1.5px;">Create New Assessment</h1>
+            <p style="color: #94a3b8; font-weight: 700;">Configure your institutional evaluation parameters.</p>
+        </header>
+
+        <section class="card" style="padding: 2.5rem; margin-bottom: 2rem;">
+            <div style="margin-bottom: 2rem;">
+                <label style="display: block; font-size: 0.75rem; font-weight: 900; color: #64748b; margin-bottom: 12px; text-transform: uppercase;">Assessment Title</label>
+                <input type="text" class="q-title-input" placeholder="e.g., Q2 General Aptitude Test" style="width: 100%; padding: 16px; border-radius: 12px; border: 2px solid #f1f5f9; font-size: 1.1rem; font-weight: 700; outline: none; transition: border-color 0.3s;" onfocus="this.style.borderColor='var(--primary)'">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+                <div>
+                    <label style="display: block; font-size: 0.75rem; font-weight: 900; color: #64748b; margin-bottom: 12px; text-transform: uppercase;">Evaluation Mode</label>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn" style="flex: 1; padding: 15px; border: 2px solid var(--primary); background: rgba(79, 70, 229, 0.05); color: var(--primary); font-weight: 900;" onclick="setMode('live')">ELITE LIVE</button>
+                        <button class="btn" style="flex: 1; padding: 15px; border: 2px solid #f1f5f9; background: white; color: #64748b; font-weight: 900;" onclick="setMode('form')">STD FORM</button>
+                    </div>
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.75rem; font-weight: 900; color: #64748b; margin-bottom: 12px; text-transform: uppercase;">Duration (Minutes)</label>
+                    <input type="number" value="30" style="width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #f1f5f9; font-size: 1rem; font-weight: 700;">
+                </div>
+            </div>
+        </section>
+
+        <section id="questionBank">
+             <div class="flex-between mb-2">
+                <h3 style="font-size: 1.4rem; font-weight: 900; color: #1a237e;">Question Bank</h3>
+                <button class="btn btn-primary" style="padding: 10px 20px;" onclick="addQuestion()">+ Add Question</button>
+             </div>
+             
+             <div id="questionsContainer">
+                 <!-- Default First Question -->
+                 <div class="card question-item animate-fade" style="padding: 2rem; margin-bottom: 1.5rem; position: relative; border-left: 4px solid var(--primary);">
+                    <div style="margin-bottom: 1.5rem;">
+                        <textarea class="q-text" placeholder="Type your question here..." style="width: 100%; min-height: 80px; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0; font-family: inherit; font-size: 1rem; font-weight: 700; resize: none;"></textarea>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <input type="text" class="opt-a" placeholder="Option A" style="padding: 12px; border-radius: 10px; border: 1px solid #f1f5f9; font-weight: 700;">
+                        <input type="text" class="opt-b" placeholder="Option B" style="padding: 12px; border-radius: 10px; border: 1px solid #f1f5f9; font-weight: 700;">
+                        <input type="text" class="opt-c" placeholder="Option C" style="padding: 12px; border-radius: 10px; border: 1px solid #f1f5f9; font-weight: 700;">
+                        <input type="text" class="opt-d" placeholder="Option D" style="padding: 12px; border-radius: 10px; border: 1px solid #f1f5f9; font-weight: 700;">
+                    </div>
+                    <div style="margin-top: 1.5rem; display: flex; align-items: center; justify-content: space-between;">
+                        <select class="q-correct" style="padding: 8px 16px; border-radius: 8px; border: 1px solid #e2e8f0; font-weight: 700; font-size: 0.75rem;">
+                            <option value="A">Correct: Option A</option>
+                            <option value="B">Correct: Option B</option>
+                            <option value="C">Correct: Option C</option>
+                            <option value="D">Correct: Option D</option>
+                        </select>
+                        <button onclick="this.closest('.question-item').remove()" style="color: #ef4444; background: none; border: none; font-weight: 800; cursor: pointer; font-size: 0.7rem;">REMOVE QUESTION</button>
+                    </div>
+                 </div>
+             </div>
+        </section>
+
+        <footer style="margin-top: 4rem; display: flex; gap: 1rem;">
+            <button class="btn btn-primary" style="flex: 2; padding: 20px; font-size: 1rem; border-radius: 16px; box-shadow: 0 10px 30px rgba(79, 70, 229, 0.3);" onclick="publish()">GO LIVE & SHARE LINK</button>
+            <button class="btn" style="flex: 1; padding: 20px; border-radius: 16px; background: white; color: #64748b; font-weight: 900; border: 2px solid #f1f5f9;" onclick="saveDraft()">SAVE DRAFT</button>
+        </footer>
+    </div>
+
+    <script>
+        let currentMode = 'live';
+
+        function setMode(mode) {
+            currentMode = mode;
+            const buttons = document.querySelectorAll('.evaluation-mode-btn');
+            buttons.forEach(btn => {
+                const isSelected = btn.getAttribute('data-mode') === mode;
+                btn.style.border = isSelected ? '2px solid var(--primary)' : '2px solid #f1f5f9';
+                btn.style.background = isSelected ? 'rgba(79, 70, 229, 0.05)' : 'white';
+                btn.style.color = isSelected ? 'var(--primary)' : '#64748b';
+            });
+        }
+
+        function addQuestion() {
+            const container = document.getElementById('questionsContainer');
+            const newQ = container.children[0].cloneNode(true);
+            newQ.querySelectorAll('input, textarea').forEach(el => el.value = '');
+            container.appendChild(newQ);
+        }
+
+        function collectQuizData() {
+            const titleInput = document.querySelector('.q-title-input');
+            const title = titleInput ? titleInput.value : 'Untitled Assessment';
+            const duration = document.querySelector('input[type="number"]').value;
+            const questionItems = document.querySelectorAll('.question-item');
+            
+            const questions = Array.from(questionItems).map(item => ({
+                text: item.querySelector('.q-text').value,
+                options: {
+                    A: item.querySelector('.opt-a').value,
+                    B: item.querySelector('.opt-b').value,
+                    C: item.querySelector('.opt-c').value,
+                    D: item.querySelector('.opt-d').value
+                },
+                correct: item.querySelector('.q-correct').value
+            }));
+
+            return {
+                id: 'qz_' + Date.now(),
+                title: title || 'Untitled Assessment',
+                type: currentMode,
+                duration: currentMode === 'live' ? duration : null,
+                questions: questions,
+                status: 'live',
+                createdAt: new Date().toLocaleDateString()
+            };
+        }
+
+        function publish() {
+            const quiz = collectQuizData();
+            const quizzes = JSON.parse(localStorage.getItem('institutional_quizzes') || '[]');
+            quizzes.push(quiz);
+            localStorage.setItem('institutional_quizzes', JSON.stringify(quizzes));
+
+            const url = `${window.location.origin}/student/quiz-session.html?id=${quiz.id}&type=${quiz.type}`;
+            
+            // Premium confirmation
+            const confirmMsg = `ASSESSMENT LIVE!\n\nSession ID: ${quiz.id}\nLink: ${url}\n\nClick OK to return to Hub. The link has been copied to your clipboard.`;
+            
+            navigator.clipboard.writeText(url).then(() => {
+                alert(confirmMsg);
+                window.location.href = "quizzes.html";
+            });
+        }
+
+        function saveDraft() {
+            alert("Draft saved successfully.");
+            window.location.href = "quizzes.html";
+        }
+
+        // Initialize mode
+        document.querySelectorAll('button[onclick*="setMode"]').forEach(btn => {
+            btn.classList.add('evaluation-mode-btn');
+            btn.setAttribute('data-mode', btn.innerText.includes('LIVE') ? 'live' : 'form');
+        });
+    </script>
+</body>
+</html>

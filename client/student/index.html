@@ -49,37 +49,53 @@
 </head>
 <body>
     <div class="app-wrapper">
-        <!-- Top Navbar -->
-        <header class="top-nav">
-            <div class="user-profile">
-                <div style="font-size: 1.5rem; font-weight: 800; display: flex; align-items: center; gap: 8px;">
-                    <img src="https://shardauniversity.com/img/logo-mobile.png" style="height: 30px; margin-right: 10px;">
-                    Sharda Skills
+        <!-- Unified Elite Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <div style="background: white; padding: 6px; border-radius: 12px; display: flex; align-items: center; justify-content: center; width: 48px; height: 48px;">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRanoTorq6EsCL3aZtGb3-G-s5OVlgNnN4stg&s" style="max-width: 100%; height: auto; border-radius: 4px;">
+                </div>
+                <div>
+                   <div style="font-size: 1.2rem; line-height: 1; font-weight: 800;">SHARDA</div>
+                   <div style="font-size: 0.7rem; opacity: 0.5; letter-spacing: 2px; font-weight: 700;">SKILLS</div>
                 </div>
             </div>
-            <div class="nav-actions">
-                <span class="badge" style="background: white; color: var(--primary); font-weight: 800;">STUDENT PORTAL</span>
-                <img id="topAvatar" src="" class="user-avatar" alt="User">
-            </div>
-        </header>
+            
+            <nav style="flex: 1;">
+                <div class="nav-category">Personal portal</div>
+                <a href="/student/index.html" class="sidebar-link active"><span>👤</span> My Profile</a>
+                <a href="/admin/index.html" class="sidebar-link"><span>📊</span> Analytics Hub</a>
 
-        <div class="main-container">
-            <!-- Left Sidebar -->
-            <aside class="sidebar">
-                <div class="sidebar-logo">
-                    <img src="https://shardauniversity.com/img/logo-mobile.png" style="height: 35px; filter: brightness(0) invert(1); margin-bottom: 10px; display: block;">
-                    Sharda Skills
+                <div class="nav-category">Academic records</div>
+                <a href="/admin/students.html" class="sidebar-link"><span>🎓</span> Audit Status</a>
+                <a href="#" class="sidebar-link"><span>📁</span> Skill Dossiers</a>
+
+                <div class="nav-category">Live updates</div>
+                <a href="#" class="sidebar-link"><span>📡</span> Announcements</a>
+            </nav>
+
+            <!-- Sidebar Widget -->
+            <div class="sidebar-widget">
+                <div style="font-size: 0.65rem; font-weight: 800; color: rgba(255,255,255,0.4); margin-bottom: 12px; text-transform: uppercase;">Portal Status</div>
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                    <span style="font-size: 0.8rem; font-weight: 800;"><span class="pulse-icon"></span> Syncing</span>
+                    <span style="font-size: 0.8rem; font-weight: 800; color: var(--success);">Online</span>
                 </div>
-                <nav>
-                    <a href="/" class="sidebar-link"><span>🏠</span> Home</a>
-                    <a href="/admin/index.html" class="sidebar-link"><span>📊</span> Analytics</a>
-                    <a href="/admin/students.html" class="sidebar-link"><span>👥</span> Students</a>
-                    <a href="/student/index.html" class="sidebar-link active"><span>👤</span> My Profile</a>
-                    <a href="#" class="sidebar-link"><span>📋</span> Admissions</a>
-                    <a href="#" class="sidebar-link"><span>🎓</span> Faculty</a>
-                    <a href="#" class="sidebar-link"><span>🏢</span> Services</a>
-                </nav>
-            </aside>
+                <div style="height: 4px; background: rgba(255,255,255,0.05); border-radius: 2px; overflow: hidden;">
+                    <div style="width: 100%; height: 100%; background: var(--success);"></div>
+                </div>
+            </div>
+
+            <div style="padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.05);">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <img id="sideAvatar" src="https://images.unsplash.com/photo-1541339907198-e08756ebafe3?w=32&h=32&fit=crop" style="width: 36px; height: 36px; border-radius: 10px;">
+                    <div>
+                        <div id="sideName" style="font-size: 0.75rem; font-weight: 800;">Student User</div>
+                        <div style="font-size: 0.6rem; color: rgba(255,255,255,0.4); font-weight: 700;">STUDENT</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
 
             <!-- Main Content Area -->
             <main class="main-content">

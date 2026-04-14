@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assessment Hub | Sharda Skills</title>
+    <link rel="stylesheet" href="../shared/styles.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <div class="app-wrapper">
+        <!-- Institutional Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <div style="background: white; padding: 4px; border-radius: 8px; display: flex; align-items: center; justify-content: center; width: 42px; height: 42px;">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRanoTorq6EsCL3aZtGb3-G-s5OVlgNnN4stg&s" style="max-width: 100%; height: auto; border-radius: 4px;">
+                </div>
+                <div>
+                   <div style="font-size: 1.1rem; line-height: 1; font-weight: 800;">SHARDA</div>
+                   <div style="font-size: 0.65rem; opacity: 0.5; letter-spacing: 2px; font-weight: 700;">SKILLS</div>
+                </div>
+            </div>
+            
+            <nav style="flex: 1;">
+                <div class="nav-category">Institutional core</div>
+                <a href="/admin/index.html" class="sidebar-link"><span>📊</span> Analytics Hub</a>
+
+                <div class="nav-category">Management</div>
+                <a href="/admin/students.html" class="sidebar-link"><span>🎓</span> Student Audit</a>
+                
+                <div class="nav-category">Digital Classroom</div>
+                <a href="/admin/quizzes.html" class="sidebar-link active"><span>📝</span> Assessment Hub</a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop" style="width: 32px; height: 32px; border-radius: 8px;">
+                    <div>
+                        <div style="font-size: 0.7rem; font-weight: 800;">Dr. Sarah Chen</div>
+                        <div style="font-size: 0.5rem; opacity: 0.5; font-weight: 700;">PROVOST ADMIN</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-container">
+            <div class="main-content">
+            <header class="flex-between mb-3">
+                <div>
+                    <h1 style="font-size: 2rem; font-weight: 950; color: #1a237e; letter-spacing: -1px;">Assessment Hub</h1>
+                    <p style="color: #94a3b8; font-weight: 700; font-size: 0.9rem;">Manage institutional examinations and live proctored sessions.</p>
+                </div>
+                <a href="quiz-creator.html" class="btn btn-primary" style="padding: 12px 24px;"><span>+</span> Create New Assessment</a>
+            </header>
+
+            <!-- Stats Ribbon -->
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 2.5rem;">
+                <div class="glass-card">
+                    <div class="glass-icon" style="background: #eef2ff; color: #4f46e5;">📝</div>
+                    <div>
+                        <div class="glass-val">12</div>
+                        <div class="glass-label">TOTAL QUIZZES</div>
+                    </div>
+                </div>
+                <div class="glass-card">
+                    <div class="glass-icon" style="background: #ecfdf5; color: #10b981;">📡</div>
+                    <div>
+                        <div class="glass-val">02</div>
+                        <div class="glass-label">LIVE SESSIONS</div>
+                    </div>
+                </div>
+                <div class="glass-card">
+                    <div class="glass-icon" style="background: #fff1f2; color: #f43f5e;">👥</div>
+                    <div>
+                        <div class="glass-val">450+</div>
+                        <div class="glass-label">PARTICIPANTS</div>
+                    </div>
+                </div>
+                <div class="glass-card">
+                    <div class="glass-icon" style="background: #e0f2fe; color: #0ea5e9;">🎯</div>
+                    <div>
+                        <div class="glass-val">82%</div>
+                        <div class="glass-label">AVG ACCURACY</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quiz Grid -->
+            <div class="quiz-grid" id="quizGrid">
+                <!-- Data injected by JS -->
+            </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Share Modal -->
+    <div id="shareModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(8px); z-index: 2000; align-items: center; justify-content: center;">
+        <div class="card animate-fade" style="width: 500px; padding: 2.5rem; background: white; border-radius: 32px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);">
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <div style="width: 64px; height: 64px; background: #eef2ff; color: var(--primary); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin: 0 auto 1.5rem;">🔗</div>
+                <h3 style="font-size: 1.5rem; font-weight: 950; color: #1a237e;">Share Assessment</h3>
+                <p style="color: #64748b; font-weight: 700;">Copy the link below to share with students.</p>
+            </div>
+            
+            <div style="background: #f8fafc; border: 2px solid #f1f5f9; border-radius: 16px; padding: 1rem; display: flex; gap: 12px; align-items: center; margin-bottom: 2rem;">
+                <input id="shareLinkInput" readonly style="flex: 1; background: transparent; border: none; font-size: 0.85rem; font-weight: 800; color: var(--primary); outline: none;">
+                <button class="btn btn-primary" style="padding: 10px 20px; font-size: 0.7rem;" onclick="copyLink()">Copy</button>
+            </div>
+
+            <button class="btn" style="width: 100%; padding: 15px; background: #f1f5f9; color: #64748b; font-weight: 950;" onclick="closeModal()">Close Window</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { QUIZZES as staticQuizzes } from './quiz-data.js';
+
+        const grid = document.getElementById('quizGrid');
+        
+        // Load dynamic quizzes from localStorage
+        const dynamicQuizzes = JSON.parse(localStorage.getItem('institutional_quizzes') || '[]');
+        
+        // Combine and render
+        const allQuizzes = [...dynamicQuizzes, ...staticQuizzes];
+
+        grid.innerHTML = allQuizzes.map(q => `
+            <div class="quiz-card animate-fade">
+                <div class="flex-between">
+                    <span class="quiz-badge ${q.status === 'live' ? 'badge-live' : q.status === 'draft' ? 'badge-draft' : 'badge-form'}">
+                        ${q.status.toUpperCase()}
+                    </span>
+                    <span style="font-size: 0.65rem; font-weight: 800; color: #94a3b8;">${q.type.toUpperCase()} MODE</span>
+                </div>
+                <h3 style="font-size: 1.1rem; font-weight: 900; color: #1a237e; margin: 0.5rem 0;">${q.title}</h3>
+                <div style="display: flex; gap: 1.5rem; color: #64748b; font-size: 0.75rem; font-weight: 700;">
+                    <span>⏱️ ${q.duration ? q.duration + 'm' : 'Unlimited'}</span>
+                    <span>❓ ${Array.isArray(q.questions) ? q.questions.length : q.questions} Ques</span>
+                </div>
+                <div style="margin-top: auto; display: flex; gap: 8px;">
+                    ${q.status === 'live' ? `
+                        <a href="live-results.html?id=${q.id}" class="btn" style="flex: 1; font-size: 0.7rem; background: #fee2e2; color: #ef4444; border: none; font-weight: 900;">Watch Live</a>
+                    ` : `
+                        <button class="btn" style="flex: 1; font-size: 0.7rem; background: #f1f5f9; color: #64748b; border: none; font-weight: 900;">Edit Draft</button>
+                    `}
+                    <button class="btn btn-primary" style="flex: 1; font-size: 0.7rem; font-weight: 900;" onclick="shareQuiz('${q.id}', '${q.type}')">Share Link</button>
+                </div>
+            </div>
+        `).join('');
+
+        window.shareQuiz = (id, type) => {
+            const url = `${window.location.origin}/student/quiz-session.html?id=${id}&type=${type}`;
+            document.getElementById('shareLinkInput').value = url;
+            document.getElementById('shareModal').style.display = 'flex';
+        };
+
+        window.copyLink = () => {
+            const input = document.getElementById('shareLinkInput');
+            input.select();
+            navigator.clipboard.writeText(input.value);
+            alert("Link copied to clipboard!");
+        };
+
+        window.closeModal = () => {
+            document.getElementById('shareModal').style.display = 'none';
+        };
+    </script>
+</body>
+</html>
