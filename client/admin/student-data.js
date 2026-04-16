@@ -119,8 +119,10 @@ const generateStudents = () => {
                 feedback: "Good potential. Focus on quantitative aptitude and verbal readiness."
             },
             performance: [
-                { category: 'Weekly Test 1', type: 'Quiz', score: wt1 * 5, notes: 'Initial assessment.' },
-                { category: 'Weekly Test 2', type: 'Quiz', score: wt2 * 5, notes: 'Follow-up assessment.' }
+                { category: 'Weekly Test 1', type: 'Quiz', phase: 'PRE', score: wt1 * 5, notes: 'Initial assessment.' },
+                { category: 'Weekly Test 2', type: 'Quiz', phase: 'MID', score: wt2 * 5, notes: 'Follow-up assessment.' },
+                { category: 'MIP Session 1', type: 'Diag', phase: 'MID', score: mip * 2.5, notes: 'Confidence and subjects.' },
+                { category: 'GD Session 1', type: 'Diag', phase: 'POST', score: gd * 2.5, notes: 'Group coordination focus.' }
             ]
         });
     }

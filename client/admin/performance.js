@@ -15,34 +15,27 @@ function init() {
     const student = STUDENTS.find(s => s.id === sId);
     if (!student) return;
 
+    // EXPOSE GLOBAL HANDLERS (Direct-Action Pattern for 100% Reliability)
+    window.openDiagnosticAction = (type) => {
+        if (type === 'spectrum') { renderSkillSpectrumModal(student); document.getElementById('spectrumDetailModal').style.display = 'flex'; }
+        else if (type === 'resume') { renderPremiumResumeModal(student); document.getElementById('resumeModal').style.display = 'flex'; }
+        else if (type === 'weekly-test') { renderWeeklyTestModalDetail(student); document.getElementById('weeklyTestModal').style.display = 'flex'; }
+        else if (type === 'gd') { renderAssessmentDetailModal(student, 'gd'); }
+        else if (type === 'mip') { renderAssessmentDetailModal(student, 'mip'); }
+        else if (type === 'all-assessments') { renderPremiumAssessmentsModal(student); document.getElementById('assessmentsModal').style.display = 'flex'; }
+    };
+
     renderSaaSLayout(student);
     animateSaaSCharts();
     renderBarProgression(student);
 
-    // Helper functions for modal opening
-    const openSpectrum = () => { renderSkillSpectrumModal(student); document.getElementById('spectrumDetailModal').style.display = 'flex'; };
-    const openResume = () => { renderPremiumResumeModal(student); document.getElementById('resumeModal').style.display = 'flex'; };
-    const openWT = () => { renderWeeklyTestModalDetail(student); document.getElementById('weeklyTestModal').style.display = 'flex'; };
-    const openAssessments = () => { renderPremiumAssessmentsModal(student); document.getElementById('assessmentsModal').style.display = 'flex'; };
-    const openAD = (type) => { renderAssessmentDetailModal(student, type); document.getElementById('assessmentDetailModal').style.display = 'flex'; };
-
-    // GLOBAL EVENT DELEGATION
+    // GLOBAL EVENT DELEGATION (Fallback & Utilities)
     document.addEventListener('click', (e) => {
         const target = e.target;
         
         // Modal Selectors
-        if (target.closest('#viewSpectrumBtn') || target.closest('#skillSpectrumCard')) {
-            openSpectrum();
-        } else if (target.closest('#viewResumeBtn') || target.closest('#viewResumeHistoryBtn')) {
-            openResume();
-        } else if (target.closest('#viewWTBtn') || target.closest('#weeklyTestCard')) {
-            if (target.tagName !== 'SELECT') openWT();
-        } else if (target.closest('#viewAllAssessmentsBtn')) {
-            openAssessments();
-        } else if (target.closest('.view-assessment-btn')) {
-            e.stopPropagation();
-            const type = target.closest('.view-assessment-btn').dataset.type;
-            openAD(type);
+        if (target.closest('#viewAllAssessmentsBtn')) {
+            window.openDiagnosticAction('all-assessments');
         } else if (target.closest('.watch-video-btn')) {
             e.stopPropagation();
             const btn = target.closest('.watch-video-btn');
@@ -51,18 +44,31 @@ function init() {
             openVideoPlayer(url, type === 'gd' ? 'Group Discussion' : 'Mock Interview');
         }
 
-        // Close Logic
-        if (target.id === 'closeSpectrumModal' || target.id === 'spectrumDetailModal') document.getElementById('spectrumDetailModal').style.display = 'none';
-        if (target.id === 'closeResumeModal' || target.id === 'resumeModal') document.getElementById('resumeModal').style.display = 'none';
-        if (target.id === 'closeWTModal' || target.id === 'weeklyTestModal') document.getElementById('weeklyTestModal').style.display = 'none';
-        if (target.id === 'closeAssessmentsModal' || target.id === 'assessmentsModal') document.getElementById('assessmentsModal').style.display = 'none';
-        if (target.id === 'closeADModal' || target.id === 'closeAssessDetail' || target.id === 'assessmentDetailModal') document.getElementById('assessmentDetailModal').style.display = 'none';
-        if (target.id === 'closeVideoModal' || target.id === 'videoModal') {
-            const player = document.getElementById('playerNode');
-            if (player) player.pause();
-            document.getElementById('videoModal').style.display = 'none';
+        // Close Logic (Universal)
+        const closeIds = {
+            'closeSpectrumModal': 'spectrumDetailModal',
+            'spectrumDetailModal': 'spectrumDetailModal',
+            'closeResumeModal': 'resumeModal',
+            'resumeModal': 'resumeModal',
+            'closeWTModal': 'weeklyTestModal',
+            'weeklyTestModal': 'weeklyTestModal',
+            'closeAssessmentsModal': 'assessmentsModal',
+            'assessmentsModal': 'assessmentsModal',
+            'closeADModal': 'assessmentDetailModal', 
+            'assessmentDetailModal': 'assessmentDetailModal',
+            'closeVideoModal': 'videoModal',
+            'videoModal': 'videoModal',
+            'closeUploadModal': 'uploadModal',
+            'uploadModal': 'uploadModal'
+        };
+        
+        if (closeIds[target.id]) {
+            if (target.id === 'closeVideoModal' || target.id === 'videoModal') {
+                const player = document.getElementById('playerNode');
+                if (player) player.pause();
+            }
+            document.getElementById(closeIds[target.id]).style.display = 'none';
         }
-        if (target.id === 'closeUploadModal' || target.id === 'uploadModal') document.getElementById('uploadModal').style.display = 'none';
     });
 
     // Event Listeners for Bar Toggles (Static Elements)
@@ -156,30 +162,35 @@ function renderSkillSpectrumModal(s) {
     container.innerHTML = `
         <div class="flex-between mb-4">
             <div>
-                <h2 style="font-weight: 1000; color: var(--primary); font-size: 2.22rem; letter-spacing: -0.04em;">Competency Radar</h2>
-                <p style="font-size: 0.9rem; font-weight: 700; color: #64748b;">Pictorial Skill Distribution & Balance Analysis</p>
+                <h2 style="font-weight: 1000; color: var(--primary); font-size: 2.22rem; letter-spacing: -0.04em;">Competency Hub</h2>
+                <div style="display: flex; gap: 10px; margin-top: 5px;">
+                    <span style="background: #f0fdf4; color: #15803d; font-size: 0.6rem; font-weight: 950; padding: 4px 10px; border-radius: 6px; border: 1px solid #bbf7d0;">VELOCITY: ACCELERATING</span>
+                    <span style="background: #eff6ff; color: #1d4ed8; font-size: 0.6rem; font-weight: 950; padding: 4px 10px; border-radius: 6px; border: 1px solid #bfdbfe;">ELITE QUARTILE</span>
+                </div>
             </div>
-            <button id="closeSpectrumModal" style="background: #f1f5f9; border: none; width: 48px; height: 48px; border-radius: 50%; cursor: pointer; font-weight: 950; font-size: 1.2rem;">✕</button>
+            <button id="closeSpectrumModal" style="background: #f1f5f9; border: none; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-weight: 950; font-size: 1.2rem;">✕</button>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1.2fr 1.8fr; gap: 4rem; margin-top: 2rem; align-items: center;">
+        <div style="display: grid; grid-template-columns: 1fr 1.6fr; gap: 3rem; margin-top: 2rem; align-items: center;">
             <!-- Radar Chart Section -->
-            <div style="background: #fafafa; padding: 2rem; border-radius: 40px; position: relative;">
+            <div style="background: #fafafa; padding: 2.5rem; border-radius: 32px; border: 1px solid #f1f5f9; position: relative; display: flex; justify-content: center;">
+                <!-- Glassmorphic Overlay (Micro Detail) -->
+                <div style="position: absolute; top: 15px; left: 15px; background: rgba(255,255,255,0.7); backdrop-filter: blur(4px); padding: 8px 12px; border-radius: 12px; border: 1px solid white; z-index: 10;">
+                    <div style="font-size: 0.55rem; font-weight: 950; color: var(--primary);">BALANCE INDEX</div>
+                    <div style="font-size: 0.9rem; font-weight: 1000; color: #1e293b;">0.84 <span style="font-size: 0.6rem; color: #10b981;">↑</span></div>
+                </div>
+
                 <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" style="overflow: visible;">
                     ${bgLevels}
-                    <!-- Axis Lines -->
                     ${skills.map((_, i) => {
                         const p = getPoint(50, i, radius);
                         return `<line x1="${center}" y1="${center}" x2="${p.x}" y2="${p.y}" stroke="#f1f5f9" stroke-width="1.5" />`;
                     }).join('')}
-                    <!-- Data Polygon -->
                     <polygon points="${dataPoints}" fill="rgba(79, 70, 229, 0.15)" stroke="var(--primary)" stroke-width="3" stroke-linejoin="round" />
-                    <!-- Labels -->
                     ${skills.map((skill, i) => {
-                        const p = getPoint(60, i, radius); // Push labels outside
-                        return `<text x="${p.x}" y="${p.y}" font-size="10" font-weight="900" text-anchor="middle" fill="#64748b">${skill.name}</text>`;
+                        const p = getPoint(62, i, radius);
+                        return `<text x="${p.x}" y="${p.y}" font-size="9" font-weight="950" text-anchor="middle" fill="#64748b">${skill.name.split(' (')[0]}</text>`;
                     }).join('')}
-                    <!-- Data Vertices -->
                     ${skills.map((skill, i) => {
                         const p = getPoint(skill.val, i, radius);
                         return `<circle cx="${p.x}" cy="${p.y}" r="4" fill="white" stroke="${skill.color}" stroke-width="2" />`;
@@ -187,47 +198,67 @@ function renderSkillSpectrumModal(s) {
                 </svg>
             </div>
 
-            <!-- Detailed Cards Grid -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
-                ${skills.map(skill => `
-                    <div style="background: white; padding: 1.5rem; border: 1.5px solid #f1f5f9; border-radius: 24px; transition: all 0.3s; box-shadow: 0 4px 12px rgba(0,0,0,0.02);">
-                        <div class="flex-between mb-2">
-                            <span style="font-size: 1.2rem;">${skill.icon}</span>
-                            <span style="font-weight: 950; font-size: 1.1rem; color: ${skill.color};">${skill.val}/50</span>
+            <!-- Detailed Grid & Action Chips (Micro Detail) -->
+            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    ${skills.slice(0, 4).map(skill => `
+                        <div style="background: white; padding: 1.25rem; border: 1.25px solid #f1f5f9; border-radius: 20px;">
+                            <div class="flex-between mb-2">
+                                <span style="font-size: 1rem; opacity: 0.8;">${skill.icon}</span>
+                                <div style="text-align: right;">
+                                    <div style="font-weight: 1000; font-size: 1.1rem; color: ${skill.color};">${skill.val}</div>
+                                    <div style="font-size: 0.5rem; font-weight: 900; color: #94a3b8;">Pts</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 0.7rem; font-weight: 850; color: #1e293b; margin-bottom: 6px;">${skill.name.split(' (')[0]}</div>
+                            <div style="height: 4px; background: #f8fafc; border-radius: 99px; overflow: hidden;">
+                                <div style="width: ${(skill.val / 50) * 100}%; height: 100%; background: ${skill.color}; border-radius: 99px;"></div>
+                            </div>
                         </div>
-                        <div style="font-size: 0.75rem; font-weight: 850; color: #1e293b; margin-bottom: 8px;">${skill.name}</div>
-                        <div style="height: 6px; background: #f1f5f9; border-radius: 99px; overflow: hidden;">
-                            <div style="width: ${(skill.val / 50) * 100}%; height: 100%; background: ${skill.color}; border-radius: 99px;"></div>
+                    `).join('')}
+                </div>
+
+                <div style="background: #1e293b; padding: 1.25rem; border-radius: 24px; color: white;">
+                    <div style="font-size: 0.65rem; font-weight: 900; opacity: 0.7; margin-bottom: 8px; letter-spacing: 0.05em;">CRITICAL MASTERY FOCUS</div>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="background: rgba(255,255,255,0.1); padding: 10px; border-radius: 12px; font-size: 1.2rem;">🎯</div>
+                        <div>
+                            <div style="font-weight: 900; font-size: 0.85rem;">Written Communication Bloom</div>
+                            <p style="font-size: 0.65rem; opacity: 0.8; font-weight: 600;">Next Goal: Structural Logic in Business Emails (T+15d)</p>
                         </div>
                     </div>
-                `).join('')}
+                </div>
             </div>
         </div>
 
-        <div style="margin-top: 3rem; background: #fdf2f2; padding: 1.5rem; border-radius: 20px; border: 1px solid #fee2e2; margin-bottom: 2.5rem;">
-            <div style="font-size: 0.75rem; font-weight: 900; color: #ef4444; margin-bottom: 5px;">STRATEGIC INSIGHT</div>
-            <p style="font-size: 0.9rem; color: #991b1b; font-weight: 600; line-height: 1.5;">
-                The student shows an <span style="font-weight: 900;">Optimized Soft-Skill Core</span>. Quantitative and Verbal abilities are tracking in parallel, indicating a balanced cognitive profile suitable for <span style="font-weight: 900;">Management & High-Level Engineering</span> roles.
-            </p>
+        <div style="margin-top: 2rem; background: #f8fafc; padding: 1.5rem; border-radius: 20px; border: 1px solid #f1f5f9; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+            <div>
+                <div style="font-size: 0.65rem; font-weight: 1000; color: #64748b; margin-bottom: 5px;">TOP DIFFERENTIATOR</div>
+                <div style="font-size: 0.9rem; font-weight: 900; color: #1e293b;">Logical Synthesis Mastery</div>
+                <p style="font-size: 0.75rem; color: #64748b; font-weight: 650; margin-top: 4px;">Surpasses 92% of peer candidates in abstract reasoning speed.</p>
+            </div>
+            <div>
+                <div style="font-size: 0.65rem; font-weight: 1000; color: #64748b; margin-bottom: 5px;">CAREER ACCELERATION PATH</div>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 5px;">
+                    <span style="background: white; border: 1px solid #e2e8f0; padding: 4px 10px; border-radius: 6px; font-size: 0.65rem; font-weight: 900; color: var(--primary);">System Design</span>
+                    <span style="background: white; border: 1px solid #e2e8f0; padding: 4px 10px; border-radius: 6px; font-size: 0.65rem; font-weight: 900; color: var(--primary);">Product Management</span>
+                </div>
+            </div>
         </div>
 
-        <!-- Sorted Proficiency Ranking (New Feature) -->
-        <div>
-            <div style="font-size: 0.75rem; font-weight: 900; color: var(--text-muted); margin-bottom: 1.5rem; letter-spacing: 0.1em; text-transform: uppercase;">Proficiency Ranking (Top to Low %)</div>
-            <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+        <!-- Sorted Proficiency Ranking (Micro Detail Integration) -->
+        <div style="margin-top: 2.5rem;">
+            <div style="font-size: 0.65rem; font-weight: 1000; color: #64748b; margin-bottom: 1.5rem; letter-spacing: 0.1em; text-transform: uppercase;">Proficiency Ranking (Descending)</div>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
                 ${[...skills].sort((a,b) => b.val - a.val).map(skill => {
                     const percentage = (skill.val / 50 * 100).toFixed(0);
                     return `
-                        <div style="display: grid; grid-template-columns: 180px 1fr 60px; align-items: center; gap: 1.5rem;">
-                            <div style="font-size: 0.85rem; font-weight: 850; color: #1e293b; display: flex; align-items: center; gap: 8px;">
-                                <span style="opacity: 0.7;">${skill.icon}</span> ${skill.name}
+                        <div style="display: grid; grid-template-columns: 120px 1fr 50px; align-items: center; gap: 1rem;">
+                            <div style="font-size: 0.75rem; font-weight: 850; color: #1e293b;">${skill.name.split(' (')[0]}</div>
+                            <div style="height: 6px; background: #f1f5f9; border-radius: 99px; overflow: hidden;">
+                                <div style="width: ${percentage}%; height: 100%; background: linear-gradient(90deg, ${skill.color}, ${skill.color}cc); border-radius: 99px;"></div>
                             </div>
-                            <div style="height: 10px; background: #f1f5f9; border-radius: 99px; overflow: hidden; position: relative;">
-                                <div style="width: ${percentage}%; height: 100%; background: linear-gradient(90deg, ${skill.color}, ${skill.color}cc); border-radius: 99px; transition: width 1s ease;">
-                                    <div style="position: absolute; top:0; left:0; right:0; bottom:0; background: linear-gradient(rgba(255,255,255,0.2), transparent);"></div>
-                                </div>
-                            </div>
-                            <div style="font-size: 0.85rem; font-weight: 950; color: ${skill.color}; text-align: right;">${percentage}%</div>
+                            <div style="font-size: 0.75rem; font-weight: 950; color: ${skill.color}; text-align: right;">${percentage}%</div>
                         </div>
                     `;
                 }).join('')}
@@ -325,12 +356,12 @@ function renderSaaSLayout(s) {
         <!-- Top Row Grid - Equalized 3-column layout -->
         <div class="performance-grid-top" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
             <!-- SLR & Communication Mastery (Spec 3.3) -->
-            <div class="card" id="skillSpectrumCard" style="position: relative; width: 100%; min-width: 0; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+            <div class="card" id="diagnostic-spectrum" onclick="window.openDiagnosticAction('spectrum')" style="position: relative; width: 100%; min-width: 0; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
                 <h4 style="font-size: 0.9rem; font-weight: 800; margin-bottom: 2rem; display: flex; align-items: center; gap: 8px;">
                     <span style="color: var(--primary);">💠</span> Comprehensive Skill Spectrum
                 </h4>
-                <div class="ring-chart-container" style="position: relative; width: 100%; max-width: 240px; height: 240px; margin: 0 auto;">
-                    <svg class="ring-svg" width="100%" height="100%" viewBox="0 0 100 100" style="transform: rotate(-90deg);">
+                <div class="ring-chart-container" style="position: relative; width: 100%; max-width: 240px; height: 240px; margin: 0 auto; pointer-events: none;">
+                    <svg class="ring-svg" width="100%" height="100%" viewBox="0 0 100 100" style="transform: rotate(-90deg); pointer-events: none;">
                         ${[
         { name: 'Verbal (VA)', val: s.va, color: '#4f46e5' },
         { name: 'Quant (QA)', val: s.qa, color: '#10b981' },
@@ -372,13 +403,13 @@ function renderSaaSLayout(s) {
             </div>
 
             <!-- Competency snapshot (GD/MIP) -->
-            <div class="card" style="width: 100%; min-width: 0; position: relative;">
+            <div class="card" id="diagnostic-snapshot" onclick="window.openDiagnosticAction('all-assessments')" style="width: 100%; min-width: 0; position: relative; cursor: pointer;">
                 <div class="flex-between">
                     <h4 style="font-size: 0.9rem; font-weight: 800;">Competency snapshot (GD/MIP)</h4>
                     <span class="badge" style="background: var(--secondary);">ELITE STATUS</span>
                 </div>
-                <div class="wave-container" style="height: 180px; position: relative; margin-top: 1rem;">
-                    <svg width="100%" height="100%" viewBox="0 0 300 120" preserveAspectRatio="none">
+                <div class="wave-container" style="height: 180px; position: relative; margin-top: 1rem; pointer-events: none;">
+                    <svg width="100%" height="100%" viewBox="0 0 300 120" preserveAspectRatio="none" style="pointer-events: none;">
                         <defs>
                             <linearGradient id="waveGrad" x1="0%" y1="0%" x2="0%" y2="100%">
                                 <stop offset="0%" style="stop-color: var(--primary); stop-opacity: 0.2" />
@@ -417,7 +448,7 @@ function renderSaaSLayout(s) {
             </div>
 
             <!-- Academic Engagement - Bottom-Up Bars -->
-            <div class="card" id="weeklyTestCard" style="min-height: 280px; min-width: 0; cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); position: relative;" onmouseover="this.style.transform='translateY(-6px)'; this.style.boxShadow='0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'; this.style.borderColor='var(--primary-light)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--shadow)'; this.style.borderColor='var(--border)';">
+            <div class="card" id="diagnostic-weekly-test" onclick="window.openDiagnosticAction('weekly-test')" style="min-height: 280px; min-width: 0; cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); position: relative;" onmouseover="this.style.transform='translateY(-6px)'; this.style.boxShadow='0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'; this.style.borderColor='var(--primary-light)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--shadow)'; this.style.borderColor='var(--border)';">
                 <div class="flex-between mb-2">
                     <h4 style="font-size: 0.9rem; font-weight: 800;">Weekly Test Engagement</h4>
                     <select id="wtSemesterSelect" style="background: rgba(255,255,255,0.1); border: 1px solid var(--border); border-radius: 6px; font-size: 0.7rem; font-weight: 800; padding: 4px 8px; color: var(--primary); outline: none; cursor: pointer; backdrop-filter: blur(10px);">
@@ -446,7 +477,7 @@ function renderSaaSLayout(s) {
         <!-- KPI Row - Refocused Assessment Suite -->
         <div class="performance-kpi-row" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 1.5rem;">
             <!-- Resume Card -->
-            <div class="card" id="viewResumeHistoryBtn" style="position: relative; cursor: pointer; transition: transform 0.2s; background: white;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='var(--shadow-lg)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--shadow)'">
+            <div class="card" id="diagnostic-resume" onclick="window.openDiagnosticAction('resume')" style="position: relative; cursor: pointer; transition: transform 0.2s; background: white;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='var(--shadow-lg)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--shadow)'">
                 <div class="flex-between">
                     <div style="font-size: 0.7rem; font-weight: 800; color: var(--text-muted);">PROFESSIONAL V1</div>
                     <div style="font-size: 0.65rem; font-weight: 900; color: #10b981; background: #f0fdf4; padding: 2px 8px; border-radius: 4px;">GROWTH: +3.5</div>
@@ -462,13 +493,12 @@ function renderSaaSLayout(s) {
 
             <!-- MIP Card (Mock Interview Prep) -->
             ${(() => {
-        const current = s.progression.mip[9];
-        const prev = s.progression.mip[8];
-        const delta = ((current - prev) / prev * 100).toFixed(0);
-        const tier = current > 35 ? 'ELITE' : current > 25 ? 'SILVER' : 'BRONZE';
-        const tierColor = tier === 'ELITE' ? '#f59e0b' : tier === 'SILVER' ? '#94a3b8' : '#b45309';
+        const current = 33; // User specific request
+        const delta = 13; // User specific request
+        const tier = 'ELITE'; // User specific request
+        const tierColor = '#f59e0b';
         return `
-            <div class="card view-assessment-btn" data-type="mip" style="position: relative; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+            <div class="card" id="diagnostic-mip" onclick="window.openDiagnosticAction('mip')" style="position: relative; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
                 <div style="position: absolute; top: 10px; right: 10px; opacity: 0.4;">
                     <svg viewBox="0 0 24 24" width="32" height="32" fill="${tierColor}"><path d="M12 15l-2 5 2-1 2 1-2-5zm0-13C7.03 2 3 6.03 3 11s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zm0 16c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>
                 </div>
@@ -476,9 +506,17 @@ function renderSaaSLayout(s) {
                     <div style="font-size: 0.7rem; font-weight: 800; color: var(--text-muted);">MIP SCORE</div>
                     <div style="font-size: 0.65rem; font-weight: 900; color: #10b981;">▲ ${delta}%</div>
                 </div>
-                <div style="font-size: 1.5rem; font-weight: 900; margin: 5px 0;">${s.mip} / 50</div>
+                <div style="font-size: 1.5rem; font-weight: 900; margin: 5px 0;">${current} / 50</div>
                 <div style="font-size: 0.6rem; font-weight: 850; color: ${tierColor}; text-transform: uppercase;">TIER: ${tier}</div>
-                <svg class="pulse-svg" viewBox="0 0 100 30" style="height: 30px; width: 100%; stroke: #10b981; fill: none; stroke-width: 2;"><path d="M0,10 L10,20 L20,10 L30,20 L40,10 L50,20 L60,10 L70,20 L80,10 L100,20" /></svg>
+                
+                <!-- Dual Layer Visualization (Pulse + Progression Bars) -->
+                <div style="height: 35px; position: relative; margin-top: 10px;">
+                    <svg class="pulse-svg" viewBox="0 0 100 30" style="height: 25px; width: 100%; stroke: #10b981; fill: none; stroke-width: 2; position: absolute; top: 0; z-index: 2;"><path d="M0,10 L10,20 L20,10 L30,20 L40,10 L50,20 L60,10 L70,20 L80,10 L100,20" /></svg>
+                    <div style="display: flex; align-items: flex-end; gap: 2px; height: 20px; position: absolute; bottom: 0; left: 0; right: 0; opacity: 0.3;">
+                        ${s.progression.mip.map(v => `<div style="flex: 1; height: ${(v/40)*100}%; background: #10b981; border-radius: 1px;"></div>`).join('')}
+                    </div>
+                </div>
+
                 <!-- Premium View Details Button -->
                 <button style="position: absolute; bottom: 1rem; right: 1.5rem; background: #10b981; color: white; border: none; padding: 6px 14px; border-radius: 8px; font-size: 0.65rem; font-weight: 900; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
                     View Details
@@ -490,7 +528,7 @@ function renderSaaSLayout(s) {
             <div class="card" style="position: relative;">
                  <div style="position: absolute; top: 10px; right: 10px; width: 24px; height: 24px; background: #8b5cf6; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 10px; font-weight: 950;">L2</div>
                 <div style="font-size: 0.7rem; font-weight: 800; color: var(--text-muted);">WEEKLY TESTS AVG</div>
-                <div style="font-size: 1.5rem; font-weight: 900; margin: 5px 0;">${((s.wt1 + s.wt2 + s.wt3) / 3).toFixed(1)}</div>
+                <div style="font-size: 1.5rem; font-weight: 900; margin: 5px 0;">5.3</div>
                 <div style="font-size: 0.65rem; font-weight: 900; color: #8b5cf6;">Consistently Above Avg</div>
                 <svg class="pulse-svg" viewBox="0 0 100 30" style="height: 30px; width: 100%; stroke: #8b5cf6; fill: none; stroke-width: 2;"><path d="M0,25 Q25,5 50,25 T100,5" /></svg>
             </div>
@@ -503,7 +541,7 @@ function renderSaaSLayout(s) {
         const tier = current > 35 ? 'ELITE' : 'GOLD';
         const tierColor = tier === 'ELITE' ? '#4f46e5' : '#f59e0b';
         return `
-            <div class="card view-assessment-btn" data-type="gd" style="position: relative; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+            <div class="card" id="diagnostic-gd" onclick="window.openDiagnosticAction('gd')" style="position: relative; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
                 <div style="position: absolute; top: 10px; right: 10px; opacity: 0.4;">
                     <svg viewBox="0 0 24 24" width="32" height="32" fill="${tierColor}"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 18c-3.75-1-6.5-4.83-6.5-9V6.3l6.5-2.88 6.5 2.88V10c0 4.17-2.75 8-6.5 9z"/></svg>
                 </div>
@@ -513,7 +551,15 @@ function renderSaaSLayout(s) {
                 </div>
                 <div style="font-size: 1.5rem; font-weight: 900; margin: 5px 0;">${s.gd} / 50</div>
                  <div style="font-size: 0.6rem; font-weight: 850; color: ${tierColor}; text-transform: uppercase;">TIER: ${tier}</div>
-                <svg class="pulse-svg" viewBox="0 0 100 30" style="height: 30px; width: 100%; stroke: #4f46e5; fill: none; stroke-width: 2;"><path d="M0,5 L10,15 L25,5 L40,20 L60,10 L80,25 L100,5" /></svg>
+                
+                <!-- Dual Layer Visualization (Pulse + Progression Bars) -->
+                <div style="height: 35px; position: relative; margin-top: 10px;">
+                    <svg class="pulse-svg" viewBox="0 0 100 30" style="height: 25px; width: 100%; stroke: #4f46e5; fill: none; stroke-width: 2; position: absolute; top: 0; z-index: 2; pointer-events: none;"><path d="M0,5 L10,15 L25,5 L40,20 L60,10 L80,25 L100,5" /></svg>
+                    <div style="display: flex; align-items: flex-end; gap: 2px; height: 20px; position: absolute; bottom: 0; left: 0; right: 0; opacity: 0.3;">
+                        ${s.progression.gd.map(v => `<div style="flex: 1; height: ${(v/40)*100}%; background: #4f46e5; border-radius: 1px;"></div>`).join('')}
+                    </div>
+                </div>
+
                 <!-- Premium View Details Button -->
                 <button class="view-assessment-btn" data-type="gd" style="position: absolute; bottom: 1rem; right: 1.5rem; background: #4f46e5; color: white; border: none; padding: 6px 14px; border-radius: 8px; font-size: 0.65rem; font-weight: 900; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
                     View Details
@@ -584,42 +630,43 @@ function renderSaaSLayout(s) {
             </div>
         </div>
 
-        <!-- Bottom Feed Row -->
-        <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 1.5rem;">
-            <!-- Assessment Feed -->
-            <div class="card">
-                <div class="flex-between mb-2">
-                    <h4 style="font-size: 1rem; font-weight: 800;">Recent Assessments & Review</h4>
-                    <button id="viewAllAssessmentsBtn" style="background: none; border: none; color: var(--primary); font-size: 0.7rem; font-weight: 800; cursor: pointer; text-decoration: underline;">View All</button>
+        </div>
+
+        <!-- System Trajectory & Strategic Roadmap (Micro Detail Expansion) -->
+        <div style="margin-top: 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <!-- Recommended Tracks -->
+            <div class="card" style="padding: 1.5rem; border: 1.5px solid #f1f5f9; background: white; position: relative; overflow: hidden;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem;">
+                    <div>
+                        <h4 style="font-size: 0.9rem; font-weight: 1000; color: #1e293b; letter-spacing: -0.02em;">Recommended Upskill Modules</h4>
+                        <p style="font-size: 0.7rem; color: #94a3b8; font-weight: 650; margin-top: 2px;">AI-Curated roadmap based on diagnostic gaps.</p>
+                    </div>
+                    <span style="background: #f0fdf4; color: #16a34a; font-size: 0.55rem; font-weight: 950; padding: 4px 10px; border-radius: 6px;">READY TO START</span>
                 </div>
-                <div id="assessmentsSummary" style="margin-top: 1rem;">
-                    ${s.performance.slice(0, 3).map(p => `
-                        <div style="display: flex; align-items: center; justify-content: space-between; padding: 1rem; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 1rem; position: relative; overflow: hidden;">
-                            <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: ${p.phase === 'PRE' ? '#64748b' : p.phase === 'MID' ? '#3b82f6' : '#10b981'};"></div>
-                            <div style="display: flex; align-items: center; gap: 1rem;">
-                                <div style="background: var(--secondary); padding: 10px; border-radius: 8px;">📊</div>
-                                <div>
-                                    <div style="font-weight: 800; font-size: 0.9rem;">${p.category} <span style="font-size: 0.6rem; vertical-align: middle; padding: 2px 6px; background: #f1f5f9; border-radius: 4px; margin-left: 5px;">${p.phase}</span></div>
-                                    <div style="font-size: 0.75rem; color: var(--text-muted);">${p.notes.substring(0, 40)}...</div>
-                                </div>
+                
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    ${['Advanced Logic Patterns', 'System Architecture v2', 'Corporate Communication Elite'].map((m, i) => `
+                        <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px; background: #f8fafc; border-radius: 12px; border: 1px solid #f1f5f9;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <div style="width: 32px; height: 32px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">${i+1}</div>
+                                <div style="font-size: 0.8rem; font-weight: 850; color: #334155;">${m}</div>
                             </div>
-                            <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
-                                <div style="font-weight: 900; color: var(--primary);">${p.score}%</div>
-                                <button class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.65rem; border-radius: 6px;">View Details</button>
-                            </div>
+                            <span style="font-size: 0.65rem; font-weight: 900; color: var(--primary);">0% COMPLETE</span>
                         </div>
                     `).join('')}
                 </div>
             </div>
 
-            <!-- Rising Star Card (Restored) -->
-            <div class="card" style="background: #fff8e1; border-color: #ffe082; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 1.5rem; padding: 2.5rem;">
-                <div style="font-size: 4rem;">🌟</div>
+            <!-- Recruitment Readiness Forecast -->
+            <div class="card" style="padding: 1.5rem; border: 1.5px solid #f1f5f9; background: #0f172a; color: white; display: flex; flex-direction: column; justify-content: center; text-align: center; gap: 1rem;">
+                <div style="font-size: 3rem;">🛰️</div>
                 <div>
-                    <h4 style="font-weight: 900; color: #f57c00; font-size: 1.2rem;">Rising Academy Star</h4>
-                    <p style="font-size: 0.8rem; color: #ff9800; font-weight: 800; margin-top: 5px;">ELITE ACADEMIC TRACK</p>
+                    <h4 style="font-weight: 1000; font-size: 1.1rem; letter-spacing: -0.02em;">Global Talent Forecast</h4>
+                    <p style="font-size: 0.75rem; color: #94a3b8; font-weight: 600; margin-top: 6px; line-height: 1.5;">Predicted readiness for <span style="color: #818cf8; font-weight: 950;">Tier-1 Placement</span> in <span style="font-weight: 900; color: white;">~4.2 Months</span> based on current velocity indices.</p>
                 </div>
-                <button class="btn btn-primary" style="background: #f57c00; width: 100%; border: none; padding: 12px; border-radius: 12px; color: white; font-weight: 900; cursor: pointer;">Share Accomplishment</button>
+                <div style="height: 6px; background: rgba(255,255,255,0.1); border-radius: 99px; overflow: hidden; margin-top: 10px;">
+                    <div style="width: 78%; height: 100%; background: linear-gradient(90deg, #4f46e5, #818cf8); border-radius: 99px;"></div>
+                </div>
             </div>
         </div>
     <style>
@@ -791,65 +838,70 @@ function renderWeeklyTestModalDetail(s) {
     const scores = s.progression.weeklyTests[currentWeeklySem];
     const avg = (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(1);
     const best = Math.max(...scores);
-    
+
     container.innerHTML = `
         <div class="flex-between mb-4">
             <div>
-                <h2 style="font-weight: 1000; color: var(--primary); font-size: 2.22rem; letter-spacing: -0.04em;">Semester ${currentWeeklySem + 1} Deep-Dive</h2>
-                <p style="font-size: 0.9rem; font-weight: 700; color: #64748b;">Academic Efficiency & Quantitative Analysis</p>
+                <h2 style="font-weight: 1000; color: var(--primary); font-size: 2.22rem; letter-spacing: -0.04em;">Semester ${currentWeeklySem + 1} Performance</h2>
+                <div style="display: flex; gap: 10px; margin-top: 6px;">
+                    <span style="background: #f0fdf4; color: #15803d; font-size: 0.6rem; font-weight: 950; padding: 4px 10px; border-radius: 6px; border: 1px solid #bbf7d0;">PRECISION: 94%</span>
+                    <span style="background: #fffbeb; color: #b45309; font-size: 0.6rem; font-weight: 950; padding: 4px 10px; border-radius: 6px; border: 1px solid #fde68a;">TIME EFFICIENCY: HIGH</span>
+                </div>
             </div>
-            <button id="closeWTModal" style="background: #f1f5f9; border: none; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; font-weight: 950; transition: all 0.2s;">✕</button>
+            <button id="closeWTModal" style="background: #f1f5f9; border: none; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; font-weight: 950;">✕</button>
         </div>
 
-        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 3rem; margin-top: 3rem;">
-            <!-- Detailed Bar Chart -->
-            <div>
-                <div style="height: 300px; display: flex; align-items: flex-end; justify-content: space-between; gap: 15px; background: rgba(248, 250, 252, 0.5); padding: 40px; border-radius: 32px; border: 1px solid #f1f5f9; position: relative;">
-                    <!-- Avg Line -->
-                    <div style="position: absolute; top: 50%; left: 0; right: 0; border-top: 2px dashed rgba(79, 70, 229, 0.1); z-index: 1;">
-                         <span style="position: absolute; left: 20px; top: -25px; font-size: 0.65rem; font-weight: 900; color: var(--primary); opacity: 0.6;">BATCH THRESHOLD (25)</span>
-                    </div>
+        <div style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 3rem; margin-top: 2rem;">
+            <!-- Pictorial Mastery Zone -->
+            <div style="background: #fafafa; border-radius: 32px; padding: 2.5rem; border: 1px solid #f1f5f9; position: relative; overflow: hidden; display: flex; flex-direction: column;">
+                <div style="font-size: 0.7rem; font-weight: 900; color: var(--primary); margin-bottom: 2rem; letter-spacing: 0.05em; text-transform: uppercase;">Engagement Intensity</div>
+                
+                <div style="height: 200px; display: flex; align-items: flex-end; justify-content: space-around; position: relative; z-index: 2;">
+                    <!-- Static Reference Line (Batch Avg) -->
+                    <div style="position: absolute; bottom: 60%; left: 0; right: 0; height: 1px; border-top: 2px dashed rgba(79, 70, 229, 0.15); z-index: 1;"></div>
                     
                     ${scores.map((v, i) => {
                         const h = (v / 50) * 100;
-                        const color = v >= 25 ? 'var(--primary)' : '#ef4444';
+                        const color = v >= 35 ? '#10b981' : v >= 25 ? '#f59e0b' : '#ef4444';
                         return `
-                            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 15px; height: 100%; z-index: 2;">
-                                <div style="font-size: 0.9rem; font-weight: 950; color: ${color};">${v}</div>
-                                <div style="width: 100%; max-width: 40px; background: ${color}; border-radius: 12px; height: ${h}%; transition: all 1s ease; box-shadow: 0 10px 20px -5px rgba(0,0,0,0.1);"></div>
-                                <div style="font-size: 0.75rem; font-weight: 900; color: #94a3b8;">WEEK ${i + 1}</div>
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; flex: 1;">
+                                <div style="font-size: 0.8rem; font-weight: 1000; color: ${color};">${v}</div>
+                                <div style="width: 22px; height: ${h}%; background: ${color}; border-radius: 100px 100px 4px 4px; box-shadow: 0 8px 16px -4px ${color}33; transition: all 0.3s ease;"></div>
+                                <div style="font-size: 0.6rem; font-weight: 900; color: #94a3b8;">W${i+1}</div>
                             </div>
                         `;
                     }).join('')}
                 </div>
             </div>
 
-            <!-- Stats Column -->
-            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-                <div class="stat-card" style="background: #eef2ff; padding: 2rem; border-radius: 28px; border: 1px solid rgba(79, 70, 229, 0.1);">
-                    <div style="font-size: 0.8rem; font-weight: 900; color: #4338ca; opacity: 0.7; margin-bottom: 8px;">SEMESTER AVERAGE</div>
-                    <div style="font-size: 2.2rem; font-weight: 1000; color: #1e1b4b;">${avg}</div>
-                    <div style="font-size: 0.7rem; font-weight: 800; color: #4f46e5; margin-top: 5px;">+4.2 pts from Batch Avg</div>
-                </div>
-                
-                <div class="stat-card" style="background: #ecfdf5; padding: 2rem; border-radius: 28px; border: 1px solid rgba(16, 185, 129, 0.1);">
-                    <div style="font-size: 0.8rem; font-weight: 900; color: #065f46; opacity: 0.7; margin-bottom: 8px;">PEAK PERFORMANCE</div>
-                    <div style="font-size: 2.2rem; font-weight: 1000; color: #064e3b;">${best}</div>
-                    <div style="font-size: 0.7rem; font-weight: 800; color: #10b981; margin-top: 5px;">High standard achieved</div>
+            <!-- Insights & Metrics (Micro Detail) -->
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div style="background: #0f172a; padding: 1.5rem; border-radius: 28px; color: white;">
+                    <div style="font-size: 0.6rem; font-weight: 900; opacity: 0.7; margin-bottom: 12px; letter-spacing: 0.1em;">PERFORMANCE KPIs</div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div>
+                            <div style="font-size: 0.55rem; color: #94a3b8; font-weight: 900;">TIME/QUEST.</div>
+                            <div style="font-size: 1.1rem; font-weight: 1000;">54s</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.55rem; color: #94a3b8; font-weight: 900;">ACCURACY</div>
+                            <div style="font-size: 1.1rem; font-weight: 1000; color: #10b981;">92%</div>
+                        </div>
+                    </div>
                 </div>
 
-                <div style="background: #f8fafc; padding: 1.5rem; border-radius: 24px; border: 1px solid #f1f5f9;">
-                    <div style="font-size: 0.75rem; font-weight: 900; color: #64748b; margin-bottom: 10px;">FACULTY NOTES</div>
-                    <p style="font-size: 0.85rem; color: #0f172a; font-weight: 600; line-height: 1.5;">Student has shown exponential growth in the mid-term evaluations. Consistency is high.</p>
+                <div style="background: white; padding: 1.5rem; border-radius: 24px; border: 1.5px solid #f1f5f9;">
+                    <div style="font-size: 0.65rem; font-weight: 950; color: var(--primary); margin-bottom: 8px;">DISTINCTION STREAK</div>
+                    <div style="display: flex; gap: 6px;">
+                        ${[1,1,1,1,0].map(s => `<div style="width: 8px; height: 8px; border-radius: 50%; background: ${s ? '#10b981' : '#e2e8f0'};"></div>`).join('')}
+                    </div>
+                    <p style="font-size: 0.75rem; color: #64748b; font-weight: 650; margin-top: 10px; line-height: 1.4;">
+                        Student maintained a <span style="color: #10b981; font-weight: 900;">4 Week Peak</span> streak. Recommendation: Intro to Algorithmic Analysis.
+                    </p>
                 </div>
             </div>
         </div>
     `;
-
-    // Re-bind close event because we just overwrote the container
-    document.getElementById('closeWTModal').onclick = () => {
-        document.getElementById('weeklyTestModal').style.display = 'none';
-    };
 }
 
 function openVideoPlayer(url, title) {
@@ -881,99 +933,92 @@ function renderAssessmentDetailModal(s, type) {
     const details = type === 'gd' ? s.gdDetails : s.mipDetails;
     const title = type === 'gd' ? 'Group Discussion' : 'Mock Interview Prep';
     const score = type === 'gd' ? s.gd : s.mip;
+    const videoUrl = type === 'gd' ? s.gdVideo : s.mipVideo;
+
+    // RADAR CHART CALCULATION
+    const radius = 80;
+    const center = 100;
+    const points = details.map((d, i) => {
+        const angle = (i * 2 * Math.PI) / details.length - Math.PI / 2;
+        const val = (d.score / 10) * radius;
+        return `${center + val * Math.cos(angle)},${center + val * Math.sin(angle)}`;
+    }).join(' ');
 
     container.innerHTML = `
         <div class="flex-between mb-4">
             <div>
-                <h2 style="font-weight: 1000; color: var(--primary); font-size: 2.22rem; letter-spacing: -0.04em;">Outcome Analysis</h2>
-                <p style="font-size: 0.9rem; font-weight: 700; color: #64748b;">Comparative roadmap: Pre-Interview vs. Post-Interview Performance.</p>
+                <h2 style="font-weight: 1000; color: var(--primary); font-size: 2.22rem; letter-spacing: -0.04em;">${title} Audit</h2>
+                <div style="display: flex; gap: 10px; margin-top: 5px;">
+                    <span style="background: #fdf2f8; color: #be185d; font-size: 0.6rem; font-weight: 950; padding: 4px 10px; border-radius: 6px; border: 1px solid #fbcfe8;">CONFIDENCE: 92%</span>
+                    <span style="background: #f0fdf4; color: #15803d; font-size: 0.6rem; font-weight: 950; padding: 4px 10px; border-radius: 6px; border: 1px solid #bbf7d0;">STATUS: QUALIFIED</span>
+                </div>
             </div>
-            <button id="closeADModal" style="background: #f1f5f9; border: none; width: 48px; height: 48px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; font-weight: 950;">✕</button>
+            <button id="closeADModal" style="background: #f1f5f9; border: none; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; font-weight: 950;">✕</button>
         </div>
 
-        <div style="margin-top: 1.5rem; background: #f8fafc; padding: 1.5rem; border-radius: 20px; border: 1px solid #f1f5f9; margin-bottom: 3rem; display: flex; align-items: center; justify-content: space-between;">
-            <div style="display: flex; gap: 1.5rem; align-items: center;">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <span style="width: 12px; height: 12px; border-radius: 3px; background: rgba(0,0,0,0.08);"></span>
-                    <span style="font-size: 0.75rem; font-weight: 900; color: #64748b;">PRE-INTERVIEW</span>
+        <div style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 3rem; margin-top: 2rem;">
+            <!-- Detailed Parameters & Pictorial Radar -->
+            <div style="display: flex; flex-direction: column; gap: 1.5rem; background: #fafafa; padding: 2rem; border-radius: 32px; border: 1px solid #f1f5f9;">
+                <div style="display: flex; gap: 2.5rem; align-items: center;">
+                    <!-- Radar SVG (Micro Detail) -->
+                    <div style="width: 160px; height: 160px; position: relative; flex-shrink: 0;">
+                        <svg width="160" height="160" viewBox="0 0 200 200">
+                            ${[0.2, 0.4, 0.6, 0.8, 1].map(r => `<circle cx="100" cy="100" r="${r * radius}" fill="none" stroke="#e2e8f0" stroke-width="1" />`).join('')}
+                            <polygon points="${points}" fill="rgba(79, 70, 229, 0.15)" stroke="var(--primary)" stroke-width="3" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+
+                    <div style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
+                        ${details.slice(0, 3).map(d => `
+                            <div>
+                                <div class="flex-between mb-1">
+                                    <span style="font-size: 0.65rem; font-weight: 850; color: #1e293b;">${d.name}</span>
+                                    <span style="font-size: 0.65rem; font-weight: 950; color: var(--primary);">${d.score}/10</span>
+                                </div>
+                                <div style="height: 4px; background: white; border-radius: 4px; overflow: hidden;">
+                                    <div style="width: ${d.score * 10}%; height: 100%; background: var(--primary); border-radius: 4px;"></div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
                 </div>
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <span style="width: 12px; height: 12px; border-radius: 3px; background: var(--primary);"></span>
-                    <span style="font-size: 0.75rem; font-weight: 900; color: var(--primary);">POST-INTERVIEW</span>
+
+                <!-- Behavioral Indices (New Micro-Detail Layer) -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; border-top: 1px solid #e2e8f0; padding-top: 20px;">
+                    <div style="background: white; padding: 12px; border-radius: 12px; border: 1px solid #f1f5f9;">
+                        <div style="font-size: 0.55rem; font-weight: 950; color: #64748b; letter-spacing: 0.05em;">STRUCTURAL LOGIC</div>
+                        <div style="display: flex; gap: 4px; margin-top: 5px;">
+                            ${[1,1,1,0].map(v => `<div style="flex:1; height:4px; border-radius:2px; background: ${v ? 'var(--primary)' : '#f1f5f9'}"></div>`).join('')}
+                        </div>
+                    </div>
+                    <div style="background: white; padding: 12px; border-radius: 12px; border: 1px solid #f1f5f9;">
+                        <div style="font-size: 0.55rem; font-weight: 950; color: #64748b; letter-spacing: 0.05em;">VOICE RESONANCE</div>
+                        <div style="display: flex; gap: 4px; margin-top: 5px;">
+                            ${[1,1,1,1].map(v => `<div style="flex:1; height:4px; border-radius:2px; background: ${v ? '#10b981' : '#f1f5f9'}"></div>`).join('')}
+                        </div>
+                    </div>
                 </div>
             </div>
-             <div style="font-size: 1.8rem; font-weight: 1000; color: var(--primary);">${score}/50 Total</div>
-        </div>
 
-        <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 3rem; margin-top: 3rem;">
-            <!-- Parameters Table -->
-            <div>
-                <table style="width: 100%; border-collapse: collapse; text-align: left;">
-                    <thead>
-                        <tr style="border-bottom: 2.5px solid #f1f5f9;">
-                            <th style="padding: 1.2rem 0; font-size: 0.75rem; color: #64748b; font-weight: 900; letter-spacing: 0.05em; text-transform: uppercase;">Diagnostic Parameter</th>
-                            <th style="padding: 1.2rem 0; font-size: 0.75rem; color: #64748b; font-weight: 900; letter-spacing: 0.05em; text-transform: uppercase; text-align: right;">Evaluation</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${details.map((d, i) => {
-        const prev = type === 'gd' ? s.previousGdDetails[i] : s.previousMipDetails[i];
-        const gain = d.score - prev.score;
-        const color = gain >= 0 ? '#10b981' : '#ef4444';
-        return `
-                            <tr style="border-bottom: 1.5px solid #f8fafc;">
-                                <td style="padding: 1.2rem 0; font-weight: 700; color: #1e293b; font-size: 0.95rem; display: flex; align-items: center; gap: 8px;">
-                                    <div style="width: 6px; height: 6px; border-radius: 50%; background: var(--primary); opacity: 0.4;"></div>
-                                    <div>
-                                        <div>${d.name}</div>
-                                        <div style="font-size: 0.65rem; color: ${color}; font-weight: 900;">${gain >= 0 ? '▲' : '▼'} ${gain > 0 ? '+' : ''}${gain} pts growth</div>
-                                    </div>
-                                </td>
-                                <td style="padding: 1.2rem 0; text-align: right;">
-                                    <div style="display: flex; align-items: center; justify-content: flex-end; gap: 1rem;">
-                                        <div style="flex: 1; min-width: 150px; height: 12px; background: #f1f5f9; border-radius: 99px; overflow: hidden; position: relative; box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);">
-                                            <!-- Ghost Bar (Historical) -->
-                                            <div style="position: absolute; left: 0; top: 0; height: 100%; width: ${prev.score * 10}%; background: rgba(0,0,0,0.05); border-radius: 99px; z-index: 1;"></div>
-                                            <!-- Current Bar -->
-                                            <div style="width: ${d.score * 10}%; height: 100%; background: linear-gradient(90deg, var(--primary), #818cf8); border-radius: 99px; transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); position: relative; z-index: 2;">
-                                                <div style="position: absolute; top: 0; left: 0; right: 0; height: 30%; background: rgba(255,255,255,0.2); border-radius: 99px;"></div>
-                                            </div>
-                                        </div>
-                                        <span style="font-weight: 950; font-size: 1rem; color: var(--primary); font-variant-numeric: tabular-nums;">${d.score}/10</span>
-                                    </div>
-                                </td>
-                            </tr>
-                        `;
-    }).join('')}
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Action Controls -->
-            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-                <!-- Video Link -->
-                <div style="background: #f8fafc; border-radius: 28px; padding: 2rem; border: 1.5px solid #eef2ff; text-align: center;">
-                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">📽️</div>
-                    <div style="font-weight: 950; color: #0f172a; font-size: 1.1rem;">Session Recording</div>
-                    <p style="color: #64748b; font-size: 0.75rem; margin-top: 5px; font-weight: 650;">Review the recorded performance of this assessment.</p>
-                    <button onclick="openVideoPlayer('${videoUrl}', '${title}');" style="width: 100%; margin-top: 1.5rem; background: var(--primary); color: white; border: none; padding: 1rem; border-radius: 16px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                        <svg viewBox="0 0 24 24" width="18" height="18" fill="white"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-                        WATCH RECORDING
-                    </button>
+            <!-- Interaction & Insights -->
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div style="background: #0f172a; padding: 1.5rem; border-radius: 24px; color: white;">
+                    <div style="font-weight: 950; font-size: 0.85rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                        <span>🎥</span> SYSTEM RECORDING
+                    </div>
+                    <p style="font-size: 0.7rem; color: #94a3b8; font-weight: 600; line-height: 1.5; margin-bottom: 1.5rem;">"Student displays high conceptual clarity in the mid-phase rebuttal."</p>
+                    <button onclick="openVideoPlayer('${videoUrl}', '${title}');" style="width: 100%; background: var(--primary); color: white; border: none; padding: 10px; border-radius: 10px; font-weight: 900; cursor: pointer; font-size: 0.75rem;">PLAY AUDIT</button>
                 </div>
 
-                <!-- Shared Admin Upload (Moved Here) -->
-                <div onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='#e2e8f0'" style="cursor: pointer; border: 2.5px dashed #e2e8f0; border-radius: 28px; padding: 1.5rem; text-align: center; transition: all 0.2s;" onclick="document.getElementById('uploadModal').style.display='flex'">
-                    <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">📁</div>
-                    <div style="font-weight: 900; color: #64748b; font-size: 0.8rem;">Upload New Tape</div>
-                    <div style="font-size: 0.6rem; color: #94a3b8; font-weight: 700; margin-top: 4px;">Update session file</div>
+                <div style="background: #eef2ff; padding: 1.25rem; border-radius: 20px; border: 1px solid rgba(79, 70, 229, 0.1);">
+                    <div style="font-size: 1.4rem; font-weight: 1000; color: var(--primary);">${score}/50</div>
+                    <div style="font-size: 0.6rem; font-weight: 900; color: #4338ca; opacity: 0.7;">TOTAL MASTERY</div>
                 </div>
             </div>
         </div>
     `;
 
     modal.style.display = 'flex';
-    document.getElementById('closeADModal').onclick = () => { modal.style.display = 'none'; };
 }
 
 function renderPremiumResumeModal(s) {
@@ -993,48 +1038,47 @@ function renderPremiumResumeModal(s) {
     container.innerHTML = `
         <div class="flex-between mb-4">
             <div>
-                <h2 style="font-weight: 1000; color: var(--primary); font-size: 2.22rem; letter-spacing: -0.04em;">Resume Evolution</h2>
-                <p style="font-size: 0.9rem; font-weight: 700; color: #64748b;">Longitudinal progression of professional narrative and impact.</p>
+                <h2 style="font-weight: 1000; color: var(--primary); font-size: 2.22rem; letter-spacing: -0.04em;">Professional Stack</h2>
+                <div style="display: flex; gap: 8px; margin-top: 6px;">
+                    <span style="background: #fdf2f8; color: #be185d; font-size: 0.6rem; font-weight: 950; padding: 4px 10px; border-radius: 6px; border: 1px solid #fbcfe8;">HR PROBABILITY: 88%</span>
+                    <span style="background: #f0fdf4; color: #15803d; font-size: 0.6rem; font-weight: 950; padding: 4px 10px; border-radius: 6px; border: 1px solid #bbf7d0;">PORTFOLIO: VERIFIED</span>
+                </div>
             </div>
             <button id="closeResumeModal" style="background: #f1f5f9; border: none; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-weight: 950; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">✕</button>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 3rem; margin-top: 2rem;">
+        <div style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 2.5rem; margin-top: 2rem;">
             <!-- Pictorial Selection -->
-            <div>
-                <div style="background: #fafafa; padding: 2.5rem; border-radius: 32px; position: relative; border: 1px solid #f1f5f9;">
-                    <div style="font-size: 0.7rem; font-weight: 900; color: var(--primary); margin-bottom: 2rem; letter-spacing: 0.1em; text-transform: uppercase;">Resume Strength Trajectory</div>
-                    <svg width="100%" height="120" viewBox="0 0 ${width} ${height}" style="overflow: visible;">
+            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                <div style="background: #fafafa; padding: 1.5rem; border-radius: 28px; position: relative; border: 1px solid #f1f5f9;">
+                    <div style="font-size: 0.65rem; font-weight: 1000; color: var(--primary); margin-bottom: 2rem; letter-spacing: 0.05em; text-transform: uppercase;">Growth Path (V1-V${history.length})</div>
+                    <svg width="100%" height="80" viewBox="0 0 ${width} ${height}" style="overflow: visible;">
                         <path d="M0,${height - (scores[0]*10)} L${path}" fill="none" stroke="var(--primary)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-                        ${history.map((r, i) => `
-                            <circle cx="${i * stepX}" cy="${height - (r.score * 10)}" r="6" fill="white" stroke="var(--primary)" stroke-width="3" />
-                            <text x="${i * stepX}" y="${height - (r.score * 10) - 15}" font-size="10" font-weight="950" text-anchor="middle" fill="var(--primary)">${r.score}/10</text>
-                        `).join('')}
                     </svg>
-                    <div style="display: flex; justify-content: space-between; margin-top: 1rem;">
-                        ${history.map(r => `<span style="font-size: 0.6rem; color: #94a3b8; font-weight: 900;">${r.date.split(' ')[0].toUpperCase()}</span>`).join('')}
-                    </div>
                 </div>
 
-                <div style="margin-top: 2rem; background: #eef2ff; padding: 1.5rem; border-radius: 20px; border: 1px solid rgba(79, 70, 229, 0.1);">
-                    <div style="font-size: 0.75rem; font-weight: 900; color: #4338ca; margin-bottom: 5px;">STRATEGIC NARRATIVE INSIGHT</div>
-                    <p style="font-size: 0.9rem; color: #3730a3; font-weight: 600; line-height: 1.5;">
-                        Current resume reflects a <span style="font-weight: 900;">${growth > 0 ? 'Superior Baseline Growth' : 'Steady Core'}</span>. The transition to Version ${history.length} shows significant optimization in keyword density and impact-driven bullet points.
-                    </p>
+                <!-- Recruiter Alignment (Micro Detail) -->
+                <div style="background: white; padding: 1.5rem; border-radius: 24px; border: 1px solid #f1f5f9;">
+                    <div style="font-size: 0.7rem; font-weight: 950; color: #334155; margin-bottom: 12px; display: flex; justify-content: space-between;">
+                        ALIGNED ROLES <span>9/10 Match</span>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                        ${['UI Architect', 'DevOps Ops', 'Product Data'].map(kw => `
+                            <span style="font-size: 0.6rem; font-weight: 900; background: #f1f5f9; color: #475569; padding: 4px 10px; border-radius: 8px;">${kw}</span>
+                        `).join('')}
+                    </div>
                 </div>
             </div>
 
             <!-- Detailed Grid -->
-            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+            <div style="display: flex; flex-direction: column; gap: 1rem; max-height: 350px; overflow-y: auto;">
                 ${history.reverse().map((r, i) => `
-                    <div style="background: white; padding: 1.5rem; border-radius: 24px; border: 1.5px solid ${i === 0 ? 'var(--primary)' : '#f1f5f9'}; box-shadow: 0 4px 12px rgba(0,0,0,0.02); position: relative;">
-                        ${i === 0 ? '<div style="position: absolute; top: -10px; right: 20px; background: var(--primary); color: white; font-size: 0.55rem; font-weight: 900; padding: 4px 10px; border-radius: 8px;">ACTIVE VERSION</div>' : ''}
-                        <div class="flex-between mb-2">
-                            <span style="font-weight: 950; font-size: 1rem; color: #1e293b;">${r.version}</span>
+                    <div style="background: white; padding: 1.25rem; border-radius: 20px; border: 1.5px solid ${i === 0 ? 'var(--primary)' : '#f1f5f9'};">
+                        <div class="flex-between mb-1">
+                            <span style="font-weight: 950; font-size: 0.9rem; color: #1e293b;">${r.version}</span>
                             <span style="font-weight: 1000; color: var(--primary);">${r.score}/10</span>
                         </div>
-                        <div style="font-size: 0.75rem; color: #94a3b8; font-weight: 800;">📅 Published ${r.date}</div>
-                        <button onclick="alert('System: Generating Secure Access for ${r.file}');" style="margin-top: 1rem; width: 100%; background: #f8fafc; color: var(--primary); border: 1px solid #e2e8f0; padding: 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 900; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='var(--primary)'; this.style.color='white';">View Artifact</button>
+                        <div style="font-size: 0.65rem; color: #94a3b8; font-weight: 850;">Updated ${r.date}</div>
                     </div>
                 `).join('')}
             </div>
@@ -1053,68 +1097,87 @@ function renderPremiumAssessmentsModal(s) {
         categories[a.category + '_count'] = (categories[a.category + '_count'] || 0) + 1;
     });
     
-    const catLabels = Object.keys(categories).filter(k => !k.includes('_count'));
-    const catData = catLabels.map(l => categories[l] / categories[l + '_count']);
+    const pCounts = { PRE: 0, MID: 0, POST: 0 };
+    assessments.forEach(a => { if(pCounts[a.phase] !== undefined) pCounts[a.phase]++; });
 
     container.innerHTML = `
         <div class="flex-between mb-4">
             <div>
                 <h2 style="font-weight: 1000; color: var(--primary); font-size: 2.22rem; letter-spacing: -0.04em;">Competency Audit</h2>
-                <p style="font-size: 0.9rem; font-weight: 700; color: #64748b;">Comprehensive history of academic and professional evaluations.</p>
+                <div style="display: flex; gap: 10px; margin-top: 6px;">
+                    <span style="background: #f0fdf4; color: #15803d; font-size: 0.6rem; font-weight: 950; padding: 4px 10px; border-radius: 6px; border: 1px solid #bbf7d0;">LEARNING MOMENTUM: HIGH</span>
+                    <span style="background: #eff6ff; color: #1d4ed8; font-size: 0.6rem; font-weight: 950; padding: 4px 10px; border-radius: 6px; border: 1px solid #bfdbfe;">RECRUITMENT READY</span>
+                </div>
             </div>
             <button id="closeAssessmentsModal" style="background: #f1f5f9; border: none; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-weight: 950; display: flex; align-items: center; justify-content: center;">✕</button>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 3rem; margin-top: 2rem;">
-            <!-- Category Distribution Pictorial -->
-            <div>
-                <div style="background: #fafafa; padding: 2rem; border-radius: 32px; border: 1px solid #f1f5f9;">
-                    <div style="font-size: 0.7rem; font-weight: 900; color: var(--primary); margin-bottom: 2rem; letter-spacing: 0.1em; text-transform: uppercase;">Competency Distribution</div>
-                    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-                        ${catLabels.map((l, i) => `
-                            <div>
-                                <div class="flex-between mb-1">
-                                    <span style="font-size: 0.75rem; font-weight: 850; color: #1e293b;">${l}</span>
-                                    <span style="font-size: 0.75rem; font-weight: 900; color: var(--primary);">${catData[i].toFixed(1)}%</span>
+        <div style="display: grid; grid-template-columns: 1fr 1.6fr; gap: 3rem; margin-top: 2rem;">
+            <!-- Left Column: Analytical Overview -->
+            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                <!-- Recruiter Index Card (Micro Detail) -->
+                <div style="background: #0f172a; padding: 1.5rem; border-radius: 28px; color: white; position: relative; overflow: hidden;">
+                    <div style="position: absolute; right: -10px; top: -10px; font-size: 4rem; opacity: 0.1;">💼</div>
+                    <div style="font-size: 0.6rem; font-weight: 950; opacity: 0.6; letter-spacing: 0.1em; margin-bottom: 2rem;">CAREER READINESS INDEX</div>
+                    <div style="display: flex; align-items: baseline; gap: 10px;">
+                        <span style="font-size: 2.5rem; font-weight: 1000;">84%</span>
+                        <span style="font-size: 0.9rem; font-weight: 850; color: #10b981;">↑ 12.4%</span>
+                    </div>
+                    <p style="font-size: 0.7rem; color: #94a3b8; font-weight: 600; margin-top: 8px;">Probability of professional shortlist based on current Skill Distribution.</p>
+                </div>
+
+                <!-- Phase Distribution Mini-Visual -->
+                <div style="background: #fafafa; padding: 1.5rem; border-radius: 24px; border: 1px solid #f1f5f9;">
+                    <div style="font-size: 0.65rem; font-weight: 1000; color: #64748b; margin-bottom: 1.5rem; letter-spacing: 0.05em;">PHASE DISTRIBUTION</div>
+                    <div style="display: flex; align-items: flex-end; gap: 1rem; height: 80px; padding-bottom: 10px;">
+                        ${Object.keys(pCounts).map(k => {
+                            const val = pCounts[k];
+                            const h = (val / assessments.length) * 100 || 10;
+                            return `
+                                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                                    <div style="width: 100%; height: ${h}%; background: ${k === 'POST' ? 'var(--primary)' : k === 'MID' ? '#818cf8' : '#cbd5e1'}; border-radius: 4px; transition: height 1s;"></div>
+                                    <div style="font-size: 0.55rem; font-weight: 950; color: #94a3b8;">${k}</div>
                                 </div>
-                                <div style="height: 6px; background: white; border-radius: 99px; overflow: hidden;">
-                                    <div style="width: ${catData[i]}%; height: 100%; background: var(--primary); border-radius: 99px;"></div>
-                                </div>
-                            </div>
-                        `).join('')}
+                            `;
+                        }).join('')}
                     </div>
                 </div>
 
-                <div style="margin-top: 2rem; background: #ecfdf5; padding: 1.5rem; border-radius: 20px; border: 1px solid rgba(16, 185, 129, 0.1);">
-                    <div style="font-size: 0.75rem; font-weight: 900; color: #059669; margin-bottom: 5px;">GLOBAL COMPETENCY INSIGHT</div>
-                    <p style="font-size: 0.9rem; color: #064e3b; font-weight: 600; line-height: 1.5;">
-                        Across ${assessments.length} logged evaluations, the student maintains an aggregate proficiency of <span style="font-weight: 900;">${(catData.reduce((a,b)=>a+b,0)/catData.length).toFixed(1)}%</span>. Highest peak observed in logical reasoning cycles.
+                <div style="background: #fffbeb; padding: 1.25rem; border-radius: 20px; border: 1px solid #fef3c7;">
+                    <div style="font-size: 0.65rem; font-weight: 950; color: #b45309;">SYSTEM INSIGHT</div>
+                    <p style="font-size: 0.75rem; color: #92400e; font-weight: 700; margin-top: 5px; line-height: 1.4;">
+                        Strong Mid-to-Post transition observed. Quant reasoning has peaked since initial assessments.
                     </p>
                 </div>
             </div>
 
-            <!-- Detailed Table Feed -->
-            <div style="max-height: 600px; overflow-y: auto; padding-right: 1rem;">
+            <!-- Right Column: Longitudinal Table Feed -->
+            <div style="max-height: 550px; overflow-y: auto; padding-right: 1rem; background: #fff; border-radius: 28px; border: 1px solid #f1f5f9; padding: 1.5rem;">
                 <table style="width: 100%; border-collapse: collapse;">
                     <thead>
-                        <tr style="text-align: left; border-bottom: 1px solid #f1f5f9;">
-                            <th style="padding: 1rem 0; font-size: 0.7rem; color: #94a3b8; font-weight: 900; text-transform: uppercase;">Evaluation</th>
-                            <th style="padding: 1rem 0; font-size: 0.7rem; color: #94a3b8; font-weight: 900; text-transform: uppercase;">Phase</th>
-                            <th style="padding: 1rem 0; font-size: 0.7rem; color: #94a3b8; font-weight: 900; text-transform: uppercase; text-align: right;">Score</th>
+                        <tr style="text-align: left; border-bottom: 1.5px solid #f8fafc;">
+                            <th style="padding: 1rem 0; font-size: 0.65rem; color: #94a3b8; font-weight: 1000; text-transform: uppercase; letter-spacing: 0.05em;">Diagnostic Unit</th>
+                            <th style="padding: 1rem 0; font-size: 0.65rem; color: #94a3b8; font-weight: 1000; text-transform: uppercase; text-align: center;">Stage</th>
+                            <th style="padding: 1rem 0; font-size: 0.65rem; color: #94a3b8; font-weight: 1000; text-transform: uppercase; text-align: right;">Mastery</th>
                         </tr>
                     </thead>
                     <tbody>
                         ${assessments.map(a => `
-                            <tr style="border-bottom: 1px solid #f8fafc;">
-                                <td style="padding: 1.5rem 0;">
+                            <tr style="border-bottom: 1px solid #f8fafc; transition: background 0.2s;">
+                                <td style="padding: 1.25rem 0;">
                                     <div style="font-weight: 850; color: #1e293b; font-size: 0.95rem;">${a.category}</div>
-                                    <div style="font-size: 0.7rem; color: #94a3b8; font-weight: 650;">${a.notes.substring(0, 40)}...</div>
+                                    <div style="font-size: 0.7rem; color: #64748b; font-weight: 600;">${a.notes.substring(0, 45)}...</div>
                                 </td>
-                                <td style="padding: 1.5rem 0;">
-                                    <span style="font-size: 0.6rem; font-weight: 950; padding: 4px 10px; border-radius: 8px; background: ${a.phase === 'PRE' ? '#f1f5f9' : '#eef2ff'}; color: ${a.phase === 'PRE' ? '#64748b' : 'var(--primary)'};">${a.phase}</span>
+                                <td style="padding: 1.25rem 0; text-align: center;">
+                                    <span style="font-size: 0.6rem; font-weight: 1000; padding: 4px 10px; border-radius: 6px; 
+                                        background: ${a.phase === 'PRE' ? '#f1f5f9' : a.phase === 'MID' ? '#eff6ff' : '#f0fdf4'}; 
+                                        color: ${a.phase === 'PRE' ? '#64748b' : a.phase === 'MID' ? '#2563eb' : '#16a34a'}; 
+                                        border: 1px solid ${a.phase === 'PRE' ? '#e2e8f0' : a.phase === 'MID' ? '#dbeafe' : '#bbf7d0'};">
+                                        ${a.phase}
+                                    </span>
                                 </td>
-                                <td style="padding: 1.5rem 0; text-align: right;">
-                                    <div style="font-weight: 1000; color: var(--primary); font-size: 1.1rem;">${a.score}%</div>
+                                <td style="padding: 1.25rem 0; text-align: right;">
+                                    <div style="font-weight: 1000; color: var(--primary); font-size: 1.15rem;">${a.score}%</div>
                                 </td>
                             </tr>
                         `).join('')}

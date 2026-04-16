@@ -2,6 +2,7 @@ import { STUDENTS } from './student-data.js';
 
 let currentHubMetric = 'gd';
 let currentHubView = 'section';
+let currentDashboardContext = 'regular';
 
 function init() {
     console.log('Initializing Enhanced Performance Dashboard...');
@@ -11,8 +12,11 @@ function init() {
     renderProgressionChart();
     renderProgressionHub();
     
+    // Initialize Context Toggle
+    initContextToggle();
+    
     // Animate static elements
-    animateValue('totalStudents', 0, 1957, 1500); // Updated to 1957 from screenshot
+    animateValue('totalStudents', 0, 1957, 1500); 
     animateSparklines();
 
     // Event Listeners for Hub Toggles
@@ -33,6 +37,35 @@ function init() {
             renderProgressionHub();
         };
     });
+}
+
+function initContextToggle() {
+    const toggleBtns = document.querySelectorAll('#dashboardToggle .toggle-btn');
+    toggleBtns.forEach(btn => {
+        btn.onclick = () => {
+            toggleBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentDashboardContext = btn.dataset.context;
+            updateDashboardContext();
+        };
+    });
+}
+
+function updateDashboardContext() {
+    const title = document.getElementById('dashboardTitle');
+    if (title) {
+        title.innerText = currentDashboardContext === 'bootcamp' ? 'Bootcamp Performance Analytics' : 'Executive Dashboard';
+        title.style.transition = 'all 0.3s ease';
+        title.style.color = currentDashboardContext === 'bootcamp' ? 'var(--primary-light)' : 'var(--text-main)';
+    }
+    
+    // Refresh charts with new context
+    renderCompetencyChart();
+    renderProgressionChart();
+    renderProgressionHub();
+    
+    // Simulate refreshing stats
+    animateSparklines();
 }
 
 function animateSparklines() {
@@ -63,7 +96,12 @@ function renderProgressionHub() {
     const semesters = Array.from({ length: 10 }, (_, i) => i + 1);
     const sectionAvg = semesters.map((_, semIdx) => {
         const sum = STUDENTS.reduce((acc, s) => acc + s.progression[currentHubMetric][semIdx], 0);
-        return sum / STUDENTS.length;
+        let avg = sum / STUDENTS.length;
+        // Adjust for Bootcamp context
+        if (currentDashboardContext === 'bootcamp') {
+            avg = avg * (1.1 + Math.random() * 0.2); // Intense bootcamp boost
+        }
+        return avg;
     });
 
     // Mock data for "Top Student" or "Comparison"

@@ -233,6 +233,32 @@
             box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
         }
 
+        /* Dashboard Header Toggle Styling */
+        .dashboard-context-toggle {
+            background: #f1f5f9;
+            padding: 4px;
+            border-radius: 14px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .dashboard-context-toggle .hub-toggles {
+            background: transparent;
+            padding: 0;
+        }
+        .dashboard-context-toggle .toggle-btn {
+            padding: 10px 24px;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+        }
+        .dashboard-context-toggle .toggle-btn.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        .dashboard-context-toggle .toggle-btn:not(.active):hover {
+            color: var(--primary-light);
+            background: rgba(255,255,255,0.5);
+        }
+
     </style>
 </head>
 <body>
@@ -259,6 +285,7 @@
 
                 <div class="nav-category">Digital Classroom</div>
                 <a href="/admin/quizzes.html" class="sidebar-link"><span>📝</span> Assessment Hub</a>
+                <a href="/ai-interview/index.html" class="sidebar-link"><span>🤖</span> AI Interview</a>
 
                 <div class="nav-category">Analytics deep-dive</div>
                 <a href="#" class="sidebar-link"><span>📡</span> Live Metrics</a>
@@ -295,6 +322,15 @@
                     <span>🔍</span>
                     <input type="text" placeholder="Search institutional data...">
                 </div>
+
+                <!-- Dashboard Context Toggle -->
+                <div class="dashboard-context-toggle">
+                    <div class="hub-toggles" id="dashboardToggle">
+                        <button class="toggle-btn active" data-context="regular">Regular Classes</button>
+                        <button class="toggle-btn" data-context="bootcamp">Bootcamp Training</button>
+                    </div>
+                </div>
+
                 <div class="top-nav-right">
                     <span>🔔</span>
                     <div style="display: flex; align-items: center; gap: 12px;">
@@ -309,7 +345,7 @@
 
             <main class="main-content">
                 <div class="flex-between mb-1">
-                    <h1 style="font-size: 2rem; font-weight: 800;">Executive Dashboard</h1>
+                    <h1 id="dashboardTitle" style="font-size: 2rem; font-weight: 800;">Executive Dashboard</h1>
                     <button class="btn btn-primary" style="display: flex; align-items: center; gap: 8px;">
                         <span>👥</span> Invite Stakeholders
                     </button>

@@ -1,23 +1,40 @@
 require('dotenv').config();
 const express = require('express');
-const mongoose = require('mongoose');
+const { createClient } = require('@supabase/supabase-js');
 const cors = require('cors');
 const apiRoutes = require('./routes/api');
+const aiRoutes = require('./routes/ai');
+const interviewRoutes = require('./routes/interview');
 
 const app = express();
 const PORT = process.env.PORT || 5001;
+
+const { supabase } = require('./db');
+
+// Export for other files (maintaining if needed, though db.js is preferred)
+module.exports = { supabase };
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 
-// MongoDB Connection
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/skill-analytics';
-mongoose.connect(MONGODB_URI)
-  .then(() => console.log('✅ Connected to MongoDB'))
-  .catch(err => console.error('❌ MongoDB connection error:', err));
+// Connection Check
+(async () => {
+    try {
+        const { data, error } = await supabase.from('students').select('*').limit(1);
+        if (error) {
+            console.error('❌ Supabase connection error:', error.message);
+        } else {
+            console.log('✅ Connected to Supabase successfully!');
+        }
+    } catch (err) {
+        console.error('❌ Supabase unexpected error:', err.message);
+    }
+})();
 
 // Routes
+app.use('/api/ai', aiRoutes);
+app.use('/api/interview', interviewRoutes);
 app.use('/api', apiRoutes);
 
 // Health Check
