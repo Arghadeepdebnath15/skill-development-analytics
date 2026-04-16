@@ -1,0 +1,139 @@
+/* Admin specific overrides for the Light Theme */
+
+.admin-grid {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.panel-empty {
+    text-align: center;
+    padding: 3rem 1rem;
+}
+
+.stat-card {
+    background: #f8fafc;
+    padding: 1rem;
+    border-radius: 12px;
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid var(--border);
+}
+
+.skill-tag {
+    background: var(--primary);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    margin-right: 5px;
+    display: inline-block;
+}
+
+/* Redesign placeholders for ABC University dashboard */
+.pie-chart {
+    border-radius: 50%;
+    width: 140px;
+    height: 140px;
+}
+
+.bar-chart {
+    background-image: linear-gradient(90deg, #f0f4ff 25%, transparent 25%, transparent 50%, #f0f4ff 50%, #f0f4ff 75%, transparent 75%, transparent);
+    background-size: 40px 100%;
+}
+
+.gauge-chart {
+    width: 100px;
+    height: 50px;
+    border-radius: 100px 100px 0 0;
+    border: 8px solid var(--primary);
+    border-bottom: none;
+}
+
+/* Audit Table Specifics (Modern SaaS Redesign) */
+.table-container {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+    overflow: hidden;
+    margin-top: 1.5rem;
+    border: 1px solid rgba(0,0,0,0.03);
+}
+
+.audit-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.audit-table th {
+    background: #1a237e; /* Solid Primary Blue */
+    color: white;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 1.5rem 1rem;
+    text-align: left;
+    letter-spacing: 0.05em;
+}
+
+.audit-table td {
+    padding: 1.4rem 1rem;
+    font-weight: 600;
+    color: #4b5563; /* Darker gray for better readability */
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.audit-table tr {
+    transition: all 0.2s ease;
+}
+
+.audit-table tr:last-child td {
+    border-bottom: none;
+}
+
+.audit-table tr:hover {
+    background: #f8faff;
+    transform: scale(1.002);
+}
+
+.audit-table .student-name {
+    color: #1a237e; /* Primary blue for names */
+    font-weight: 800;
+    font-size: 0.95rem;
+}
+
+.audit-table .score-value {
+    font-family: 'JetBrains Mono', monospace; /* Professional look for numbers */
+    font-size: 1rem;
+    font-weight: 800;
+}
+
+.audit-table .btn-view {
+    border-radius: 8px;
+    border: 2px solid #448aff;
+    background: white;
+    color: #448aff;
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.audit-table .btn-view:hover {
+    background: #448aff;
+    color: white;
+    box-shadow: 0 4px 12px rgba(68, 138, 255, 0.3);
+}
+
+@media (max-width: 1024px) {
+    .admin-grid {
+        grid-template-columns: 1fr;
+    }
+}

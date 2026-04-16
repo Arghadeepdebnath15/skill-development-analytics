@@ -1,0 +1,105 @@
+.profile-layout {
+    display: grid;
+    grid-template-areas: 
+        "header skills"
+        "header history";
+    grid-template-columns: 350px 1fr;
+    gap: 2rem;
+}
+
+.profile-header { grid-area: header; text-align: center; height: fit-content; }
+.skills-section { grid-area: skills; }
+.history-section { grid-area: history; }
+
+.flex-column-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.profile-img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 4px solid var(--primary);
+    padding: 5px;
+    object-fit: crop;
+}
+
+.stats-row {
+    display: flex;
+    justify-content: space-around;
+    border-top: 1px solid var(--border);
+    padding-top: 1.5rem;
+}
+
+.stat-box {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-box .val { font-size: 1.5rem; font-weight: 700; color: var(--secondary); }
+.stat-box .lbl { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; }
+
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.skill-card {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+}
+
+.progress-bar {
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    margin-top: 10px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    border-radius: 4px;
+}
+
+.timeline {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.timeline-item {
+    border-left: 2px solid var(--primary);
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -7px;
+    top: 5px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--primary);
+}
+
+@media (max-width: 900px) {
+    .profile-layout {
+        grid-template-areas: 
+            "header"
+            "skills"
+            "history";
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Gateway | Sharda University</title>
+    <link rel="stylesheet" href="shared/styles.css">
+    <style>
+        .pictorial-hero {
+            height: 400px;
+            background: linear-gradient(rgba(26, 35, 126, 0.45), rgba(26, 35, 126, 0.65)), url('/assets/campus-hero.png');
+            background-size: cover;
+            background-position: center;
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 4rem;
+            color: white;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .portal-card-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: -60px;
+            padding: 0 4rem;
+        }
+
+        .portal-card-premium {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(26, 35, 126, 0.08);
+            overflow: hidden;
+            border: 1px solid var(--border);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .portal-card-premium:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(26, 35, 126, 0.15);
+            border-color: var(--primary-light);
+        }
+
+        .portal-img {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            border-bottom: 4px solid var(--primary-light);
+        }
+    </style>
+</head>
+<body>
+    <div class="app-wrapper">
+        <!-- Unified Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <img src="https://shardauniversity.com/img/logo-mobile.png" style="height: 40px; filter: brightness(0) invert(1); margin-bottom: 10px; display: block;">
+                Sharda Skills
+            </div>
+            <nav>
+                <a href="/" class="sidebar-link active"><span>🏠</span> Home Portal</a>
+                <a href="/admin/index.html" class="sidebar-link"><span>📈</span> Analytics Hub</a>
+                <a href="/admin/students.html" class="sidebar-link"><span>👥</span> Student Directory</a>
+                <a href="/student/index.html" class="sidebar-link"><span>👤</span> Personal Records</a>
+                <a href="#" class="sidebar-link"><span>📋</span> Admissions</a>
+            </nav>
+        </aside>
+
+        <!-- Main Workspace -->
+        <div class="main-container">
+            <header class="top-header">
+                <div class="search-bar">
+                    <span>🔍</span>
+                    <input type="text" placeholder="Access deep-learning metrics...">
+                </div>
+                <div style="display: flex; align-items: center; gap: 2rem;">
+                    <span class="badge" style="background: var(--primary); color: white;">v1.2 PREMIUM</span>
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop" class="user-avatar" alt="User">
+                </div>
+            </header>
+
+            <main class="main-content">
+                <section class="pictorial-hero animate-fade">
+                    <h1 style="font-size: 3.5rem; font-weight: 900; letter-spacing: -2px; line-height: 1;">Advancing Institutional Intelligence</h1>
+                    <p style="font-size: 1.25rem; font-weight: 600; opacity: 0.9; margin-top: 20px; max-width: 600px;">
+                        The global gateway for ABC University academic analytics, resource allocation, and student performance tracking.
+                    </p>
+                </section>
+
+                <div class="portal-card-grid">
+                    <!-- Analytics Access -->
+                    <div class="portal-card-premium">
+                        <div class="portal-img" style="background-image: url('/assets/analytics-pictogram.png');"></div>
+                        <div style="padding: 2rem;">
+                            <span class="badge" style="background: rgba(26, 35, 126, 0.1); color: var(--primary); margin-bottom: 1rem;">EXECUTIVE PORTAL</span>
+                            <h2 style="font-weight: 800; font-size: 1.5rem; margin-bottom: 10px;">Executive Analytics</h2>
+                            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 2rem;">Access sparkline trends, institutional balance, and high-fidelity staff distribution metrics.</p>
+                            <a href="/admin/index.html" class="btn btn-primary" style="display: inline-block; text-decoration: none;">Launch Dashboard ›</a>
+                        </div>
+                    </div>
+
+                    <!-- Student Portal Access -->
+                    <div class="portal-card-premium">
+                        <div class="portal-img" style="background-image: url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&fit=crop');"></div>
+                        <div style="padding: 2rem;">
+                            <span class="badge" style="background: rgba(255, 64, 129, 0.1); color: var(--accent); margin-bottom: 1rem;">ACADEMIC HUB</span>
+                            <h2 style="font-weight: 800; font-size: 1.5rem; margin-bottom: 10px;">Academic Portfolio</h2>
+                            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 2rem;">Seamlessly manage personal records, skill mastery maps, and historical academic logs.</p>
+                            <a href="/student/index.html" class="btn btn-primary" style="display: inline-block; text-decoration: none;">View Profile ›</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 6rem; text-align: center; color: var(--text-muted); font-size: 0.8rem; font-weight: 700;">
+                    SHARDA UNIVERSITY • OFFICIAL ACADEMIC GOVERNANCE PORTAL • 2026
+                </div>
+            </main>
+        </div>
+    </div>
+</body>
+</html>

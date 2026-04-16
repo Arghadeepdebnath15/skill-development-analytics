@@ -1,0 +1,89 @@
+:root {
+    --ring-1: #448aff;
+    --ring-2: #ff4081;
+    --ring-3: #4caf50;
+    --ring-4: #ff9800;
+}
+
+.performance-grid-top {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.2fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.performance-kpi-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* Multi-Ring Chart */
+.ring-chart-container {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+}
+.ring-svg {
+    transform: rotate(-90deg);
+}
+.ring-path {
+    fill: none;
+    stroke-width: 10;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Wave Chart */
+.wave-container {
+    height: 120px;
+    margin-top: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Pulse Chart (KPI) */
+.pulse-svg {
+    width: 100%;
+    height: 30px;
+    stroke: var(--primary-light);
+    stroke-width: 2;
+    fill: none;
+    margin-top: 1rem;
+}
+
+/* Split Bar Chart */
+.split-bar-group {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 150px;
+    margin-top: 1rem;
+}
+.split-bar-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+}
+.bar-top, .bar-bottom {
+    width: 20px;
+    border-radius: 4px;
+    transition: height 1s ease;
+}
+.bar-top { background: var(--primary); }
+.bar-bottom { background: #ff9800; }
+
+/* SaaS Header Styling */
+.saas-header {
+    background: white;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: var(--shadow);
+}

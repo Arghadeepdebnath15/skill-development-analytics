@@ -1,0 +1,21 @@
+{
+  "name": "skill-development-analytics",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview",
+    "server": "cd server && node index.js",
+    "start": "concurrently \"npm run dev\" \"npm run server\""
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "mongoose": "^7.6.3"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "vite": "^8.0.8"
+  }
+}

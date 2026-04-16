@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Executive Dashboard | Sharda University</title>
+    <link rel="stylesheet" href="../shared/styles.css">
+    <style>
+        /* Specific Styles for Dribbble Redesign */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            padding: 1.8rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card .label {
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .stat-card .value {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        .sparkline {
+            width: 100%;
+            height: 40px;
+            stroke: var(--primary-light);
+            stroke-width: 2.5;
+            fill: none;
+            stroke-linecap: round;
+        }
+
+        /* Animated Pie Chart */
+        .pie-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto;
+        }
+        .pie-svg {
+            transform: rotate(-90deg);
+        }
+        .pie-slice {
+            fill: none;
+            stroke-width: 8;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        /* Emergency Alert Card */
+        .alert-card {
+            background: linear-gradient(135deg, #ff5252 0%, #d32f2f 100%);
+            color: white;
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+            border: none;
+        }
+        .alert-card:hover {
+            transform: scale(1.02);
+        }
+        .alert-content {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+            z-index: 2;
+        }
+        .alert-img {
+            width: 100px;
+            height: auto;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));
+        }
+
+        /* Donation List */
+        .list-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .list-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Curved Area Chart */
+        .area-chart-container {
+            height: 250px;
+            margin-top: 2rem;
+        }
+        
+        /* Bar Chart */
+        .bar-group {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            height: 200px;
+            margin-top: 1.5rem;
+        }
+        .bar {
+            width: 12px;
+            background: var(--primary-light);
+            border-radius: 4px;
+            transition: height 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+            padding: 1.5rem;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .chart-main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        /* Progression Hub Styles */
+        .progression-hub {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .hub-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 2rem;
+        }
+        .hub-toggles {
+            display: flex;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 4px;
+            border-radius: 12px;
+            gap: 4px;
+        }
+        .toggle-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text-muted);
+            border: none;
+            background: transparent;
+        }
+        .toggle-btn.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+        }
+        /* Enriched Filter Bar */
+        .filter-bar {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 0.8fr 1fr;
+            gap: 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+        .filter-item {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .filter-item label {
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .filter-item select {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            padding: 16px 20px;
+            color: var(--text-main);
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            outline: none;
+        }
+        .filter-item select:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--primary-light);
+        }
+        .filter-item select:focus {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="app-wrapper">
+        <!-- Unified Elite Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <div style="background: white; padding: 6px; border-radius: 12px; display: flex; align-items: center; justify-content: center; width: 48px; height: 48px;">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRanoTorq6EsCL3aZtGb3-G-s5OVlgNnN4stg&s" style="max-width: 100%; height: auto; border-radius: 4px;">
+                </div>
+                <div>
+                   <div style="font-size: 1.2rem; line-height: 1; font-weight: 800;">SHARDA</div>
+                   <div style="font-size: 0.7rem; opacity: 0.5; letter-spacing: 2px; font-weight: 700;">SKILLS</div>
+                </div>
+            </div>
+            
+            <nav style="flex: 1;">
+                <div class="nav-category">Institutional core</div>
+                <a href="/admin/index.html" class="sidebar-link active"><span>📊</span> Analytics Hub</a>
+
+                <div class="nav-category">Management</div>
+                <a href="/admin/students.html" class="sidebar-link"><span>🎓</span> Student Audit <span class="badge">125</span></a>
+                <a href="#" class="sidebar-link"><span>📁</span> Skill Dossiers</a>
+
+                <div class="nav-category">Digital Classroom</div>
+                <a href="/admin/quizzes.html" class="sidebar-link"><span>📝</span> Assessment Hub</a>
+
+                <div class="nav-category">Analytics deep-dive</div>
+                <a href="#" class="sidebar-link"><span>📡</span> Live Metrics</a>
+                <a href="#" class="sidebar-link"><span>🗺️</span> Skill Map</a>
+            </nav>
+
+            <!-- Sidebar Widget -->
+            <div class="sidebar-widget">
+                <div style="font-size: 0.65rem; font-weight: 800; color: rgba(255,255,255,0.4); margin-bottom: 12px; text-transform: uppercase;">Batch Health</div>
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                    <span style="font-size: 0.8rem; font-weight: 800;"><span class="pulse-icon"></span> Optimizing</span>
+                    <span style="font-size: 0.8rem; font-weight: 800; color: var(--success);">94.2%</span>
+                </div>
+                <div style="height: 4px; background: rgba(255,255,255,0.05); border-radius: 2px; overflow: hidden;">
+                    <div style="width: 94%; height: 100%; background: var(--success);"></div>
+                </div>
+            </div>
+
+            <div style="padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.05);">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop" style="width: 36px; height: 36px; border-radius: 10px;">
+                    <div>
+                        <div style="font-size: 0.75rem; font-weight: 800;">Dr. Sarah Chen</div>
+                        <div style="font-size: 0.6rem; color: rgba(255,255,255,0.4); font-weight: 700;">PROVOST ADMIN</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Workspace -->
+        <div class="main-container">
+            <header class="top-header">
+                <div class="search-bar">
+                    <span>🔍</span>
+                    <input type="text" placeholder="Search institutional data...">
+                </div>
+                <div class="top-nav-right">
+                    <span>🔔</span>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop" class="user-avatar" alt="User">
+                        <div style="font-size: 0.8rem;">
+                            <div style="font-weight: 800;">Admin User</div>
+                            <div style="color: var(--text-muted); font-weight: 600;">Super Admin</div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <main class="main-content">
+                <div class="flex-between mb-1">
+                    <h1 style="font-size: 2rem; font-weight: 800;">Executive Dashboard</h1>
+                    <button class="btn btn-primary" style="display: flex; align-items: center; gap: 8px;">
+                        <span>👥</span> Invite Stakeholders
+                    </button>
+                </div>
+
+                <!-- Stats Row -->
+                <div class="stat-grid">
+                    <!-- Resume Card -->
+                    <div class="card stat-card">
+                        <div class="label">RESUME V1 <span style="color: var(--warning); font-weight: 800;">V2 PENDING</span></div>
+                        <div class="value">5.5</div>
+                        <svg class="sparkline" viewBox="0 0 200 60">
+                            <path d="M0,50 Q40,10 80,45 T160,20 T200,40" />
+                        </svg>
+                        <div style="font-size: 0.6rem; color: var(--text-muted); margin-top: 10px; font-weight: 700;">
+                            Appeared: 31 | Total: 110
+                        </div>
+                    </div>
+                    <!-- GD Card -->
+                    <div class="card stat-card">
+                        <div class="label">GROUP DISCUSSION <span style="color: var(--success); font-weight: 800;">↑ High</span></div>
+                        <div class="value">17.4</div>
+                        <svg class="sparkline" viewBox="0 0 200 60">
+                            <path d="M0,20 Q40,60 80,30 T160,50 T200,10" style="stroke: var(--accent)" />
+                        </svg>
+                        <div style="font-size: 0.6rem; color: var(--text-muted); margin-top: 10px; font-weight: 700;">
+                            Appeared: 37 | Total: 35
+                        </div>
+                    </div>
+                    <!-- MIP Card -->
+                    <div class="card stat-card">
+                        <div class="label">MOCK INTERVIEW <span style="color: var(--success); font-weight: 800;">↑ High</span></div>
+                        <div class="value">17.9</div>
+                        <svg class="sparkline" viewBox="0 0 200 60">
+                            <path d="M0,55 Q40,55 80,35 T160,15 T200,5" style="stroke: var(--success)" />
+                        </svg>
+                        <div style="font-size: 0.6rem; color: var(--text-muted); margin-top: 10px; font-weight: 700;">
+                            Appeared: 32 | Total: 35
+                        </div>
+                    </div>
+                    <!-- Weekly Test Card -->
+                    <div class="card stat-card">
+                        <div class="label">WEEKLY TESTS <span style="color: var(--error); font-weight: 800;">↓ Low</span></div>
+                        <div class="value">10.2</div>
+                        <svg class="sparkline" viewBox="0 0 200 60">
+                            <path d="M0,10 Q40,40 80,10 T160,40 T200,30" style="stroke: var(--accent)" />
+                        </svg>
+                        <div style="font-size: 0.6rem; color: var(--text-muted); margin-top: 10px; font-weight: 700;">
+                            Appeared: 40 | Total: 20
+                        </div>
+                    </div>
+                    <!-- LSRW Card -->
+                    <div class="card stat-card">
+                        <div class="label">LSRW SKILLS <span style="color: var(--success); font-weight: 800;">↑ Stable</span></div>
+                        <div class="value">49.7</div>
+                        <svg class="sparkline" viewBox="0 0 200 60">
+                            <path d="M0,40 Q40,20 80,50 T160,10 T200,30" style="stroke: var(--primary)" />
+                        </svg>
+                        <div style="font-size: 0.6rem; color: var(--text-muted); margin-top: 10px; font-weight: 700;">
+                            Appeared: 36 | Total: 100
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enriched Filter Bar -->
+                <div class="filter-bar">
+                    <div class="filter-item">
+                        <label><span>🏢</span> School</label>
+                        <select>
+                            <option>All Schools</option>
+                            <option>SDS</option>
+                            <option>SMSR</option>
+                            <option>SOE</option>
+                            <option>SOP</option>
+                            <option>SSAHS</option>
+                            <option>SSAS</option>
+                            <option>SSBS</option>
+                            <option>SSBSR</option>
+                            <option>SSDAP</option>
+                            <option>SSET</option>
+                            <option>SSHSS</option>
+                            <option>SSMFE</option>
+                            <option>SSNSR</option>
+                            <option>SSOL</option>
+                            <option>SUBSR</option>
+                            <option>SUSMR</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label><span>📅</span> Semester</label>
+                        <select>
+                            <option>Semester 1</option>
+                            <option>Semester 2</option>
+                            <option>Semester 3</option>
+                            <option>Semester 4</option>
+                            <option>Semester 5</option>
+                            <option>Semester 6</option>
+                            <option>Semester 7</option>
+                            <option>Semester 8</option>
+                            <option>Semester 9</option>
+                            <option>Semester 10</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label><span>📦</span> Section</label>
+                        <select>
+                            <option>All Sections</option>
+                            <option>Section A</option>
+                            <option>Section B</option>
+                            <option>Section C</option>
+                            <option>Section D</option>
+                            <option>Section E</option>
+                            <option>Section F</option>
+                            <option>Section G</option>
+                            <option>Section H</option>
+                            <option>Section I</option>
+                            <option>Section J</option>
+                            <option>Section K</option>
+                            <option>Section L</option>
+                            <option>Section M</option>
+                            <option>Section N</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label><span>⏳</span> Batch</label>
+                        <select>
+                            <option>2023-2027</option>
+                            <option>2022-2026</option>
+                            <option>2021-2025</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Main Content Row: New Charts -->
+                <div class="chart-main-grid">
+                    <!-- Core Competency Comparison -->
+                    <div class="card">
+                        <div class="flex-between">
+                            <h4 style="font-weight: 800; color: var(--text-main); font-size: 0.95rem;">Core Competency Comparison (GD vs MIP)</h4>
+                            <div style="display: flex; gap: 15px; font-size: 0.65rem; font-weight: 800;">
+                                <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 8px; height: 8px; background: var(--primary);"></span> Avg GD</span>
+                                <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 8px; height: 8px; background: #fbbf24;"></span> Avg MIP</span>
+                            </div>
+                        </div>
+                        <div id="competencyChart" class="chart-canvas-container">
+                            <!-- SVG Bar Chart injected by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Resume V1 Score Progression -->
+                    <div class="card">
+                        <h4 style="font-weight: 800; color: var(--text-main); font-size: 0.95rem;">Resume V1 Score Progression</h4>
+                        <div id="progressionChart" class="chart-canvas-container">
+                            <!-- SVG Line Chart injected by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom Row -->
+                <div style="display: grid; grid-template-columns: 2fr 1.2fr; gap: 1.5rem;">
+                    <!-- Area Chart -->
+                    <div class="card">
+                        <div class="flex-between" style="margin-bottom: 2rem;">
+                            <h4 style="font-weight: 800; color: var(--text-main); font-size: 1rem;">GPA Performance Trends</h4>
+                            <div class="chart-toggle">
+                                <span class="toggle-item active">Monthly</span>
+                                <span class="toggle-item">Fiscal Year</span>
+                            </div>
+                        </div>
+                        <div class="area-chart-container" style="height: 250px; position: relative;">
+                            <svg width="100%" height="100%" viewBox="0 0 500 200" preserveAspectRatio="none">
+                                <defs>
+                                    <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
+                                        <feGaussianBlur stdDeviation="3" result="blur" />
+                                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                                    </filter>
+                                    <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="0%" style="stop-color: var(--primary-light); stop-opacity: 0.15" />
+                                        <stop offset="100%" style="stop-color: var(--primary-light); stop-opacity: 0" />
+                                    </linearGradient>
+                                </defs>
+                                <!-- Grid Lines -->
+                                <line x1="0" y1="50" x2="500" y2="50" class="chart-grid" />
+                                <line x1="0" y1="100" x2="500" y2="100" class="chart-grid" />
+                                <line x1="0" y1="150" x2="500" y2="150" class="chart-grid" />
+                                
+                                <path d="M0,150 Q50,140 100,165 T200,85 T300,125 T400,65 T500,105" fill="none" stroke="var(--primary-light)" stroke-width="4" filter="url(#neonGlow)" class="neon-path" />
+                                <path d="M0,150 Q50,140 100,165 T200,85 T300,125 T400,65 T500,105 V200 H0 Z" fill="url(#areaGradient)" />
+
+                                <!-- Data Peaks -->
+                                <circle cx="205" cy="85" r="4" fill="var(--primary)" stroke="white" stroke-width="2" />
+                                <circle cx="405" cy="65" r="4" fill="var(--primary)" stroke="white" stroke-width="2" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Balance Summary -->
+                    <div class="card">
+                         <div class="flex-between mb-2">
+                            <h4 style="font-weight: 800; font-size: 1rem;">Institutional Liquidity</h4>
+                            <span class="trend-badge trend-up"><span>📈</span> 22.4% ARR</span>
+                         </div>
+                         <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 2rem;">
+                            <div style="font-size: 2.8rem; font-weight: 950; color: var(--primary); letter-spacing: -2px;">$7,432.14</div>
+                            <div style="font-size: 1rem; color: var(--text-muted); font-weight: 800;">USD</div>
+                         </div>
+                         
+                         <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                            <div>
+                                <div class="flex-between mb-1">
+                                    <span style="font-size: 0.8rem; font-weight: 800;">Internal Operating Funds</span>
+                                    <span style="font-size: 0.8rem; font-weight: 900; color: var(--success);">+12.1%</span>
+                                </div>
+                                <div style="height: 10px; background: #f1f5f9; border-radius: 99px; position: relative; overflow: hidden;">
+                                    <div style="width: 78%; height: 100%; background: linear-gradient(90deg, var(--primary), var(--primary-light)); border-radius: 99px;" class="shimmer-fill"></div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="flex-between mb-1">
+                                    <span style="font-size: 0.8rem; font-weight: 800;">Capital Grants Utilization</span>
+                                    <span style="font-size: 0.8rem; font-weight: 900; color: var(--error);">-1.5%</span>
+                                </div>
+                                <div style="height: 10px; background: #f1f5f9; border-radius: 99px; position: relative; overflow: hidden;">
+                                    <div style="width: 42%; height: 100%; background: linear-gradient(90deg, var(--accent), #f472b6); border-radius: 99px;" class="shimmer-fill"></div>
+                                </div>
+                            </div>
+                         </div>
+                    </div>
+                </div>
+                <!-- Progression Hub -->
+                <div class="progression-hub">
+                    <div class="hub-header">
+                        <div>
+                            <h2 style="font-size: 1.8rem; font-weight: 900; color: var(--primary-light);">Skill Progression Hub</h2>
+                            <p style="color: var(--text-muted); font-size: 0.9rem; font-weight: 600;">Historical tracking of key performance metrics across 10 semesters.</p>
+                        </div>
+                        <div style="display: flex; gap: 2rem;">
+                            <div class="filter-group">
+                                <label style="font-size: 0.65rem; text-transform: uppercase; color: var(--text-muted); font-weight: 800; display: block; margin-bottom: 8px;">Metric Parameter</label>
+                                <div class="hub-toggles" id="metricToggle">
+                                    <button class="toggle-btn active" data-metric="gd">GD</button>
+                                    <button class="toggle-btn" data-metric="mip">MIP</button>
+                                    <button class="toggle-btn" data-metric="resume">Resume</button>
+                                </div>
+                            </div>
+                            <div class="filter-group">
+                                <label style="font-size: 0.65rem; text-transform: uppercase; color: var(--text-muted); font-weight: 800; display: block; margin-bottom: 8px;">Comparison View</label>
+                                <div class="hub-toggles" id="viewToggle">
+                                    <button class="toggle-btn active" data-view="section">Section Avg</button>
+                                    <button class="toggle-btn" data-view="student">Top Student</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="height: 450px; padding: 2.5rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
+                        <div id="progressionHubChart" style="width: 100%; height: 100%;">
+                            <!-- Progression Chart injected by JS -->
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script type="module" src="admin.js"></script>
+</body>
+</html>

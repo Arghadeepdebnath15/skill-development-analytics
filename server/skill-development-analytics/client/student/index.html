@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Portfolio | Sharda University</title>
+    <link rel="stylesheet" href="../shared/styles.css">
+    <link rel="stylesheet" href="../admin/admin.css">
+    <link rel="stylesheet" href="../admin/student-profile.css">
+    <style>
+        .student-hero {
+            background: linear-gradient(rgba(26, 35, 126, 0.8), rgba(26, 35, 126, 0.9)), url('https://images.unsplash.com/photo-1541339907198-e08756ebafe3?w=1200&h=400&fit=crop');
+            background-size: cover;
+            background-position: center;
+            padding: 3.5rem;
+            border-radius: 24px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+        .student-profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 6px solid rgba(255,255,255,0.2);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        .academic-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 2rem;
+        }
+        .skill-meter {
+            height: 12px;
+            background: #eaedf2;
+            border-radius: 99px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+        .skill-meter-fill {
+            height: 100%;
+            background: var(--primary);
+            transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+    </style>
+</head>
+<body>
+    <div class="app-wrapper">
+        <!-- Top Navbar -->
+        <header class="top-nav">
+            <div class="user-profile">
+                <div style="font-size: 1.5rem; font-weight: 800; display: flex; align-items: center; gap: 8px;">
+                    <img src="https://shardauniversity.com/img/logo-mobile.png" style="height: 30px; margin-right: 10px;">
+                    Sharda Skills
+                </div>
+            </div>
+            <div class="nav-actions">
+                <span class="badge" style="background: white; color: var(--primary); font-weight: 800;">STUDENT PORTAL</span>
+                <img id="topAvatar" src="" class="user-avatar" alt="User">
+            </div>
+        </header>
+
+        <div class="main-container">
+            <!-- Left Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-logo">
+                    <img src="https://shardauniversity.com/img/logo-mobile.png" style="height: 35px; filter: brightness(0) invert(1); margin-bottom: 10px; display: block;">
+                    Sharda Skills
+                </div>
+                <nav>
+                    <a href="/" class="sidebar-link"><span>🏠</span> Home</a>
+                    <a href="/admin/index.html" class="sidebar-link"><span>📊</span> Analytics</a>
+                    <a href="/admin/students.html" class="sidebar-link"><span>👥</span> Students</a>
+                    <a href="/student/index.html" class="sidebar-link active"><span>👤</span> My Profile</a>
+                    <a href="#" class="sidebar-link"><span>📋</span> Admissions</a>
+                    <a href="#" class="sidebar-link"><span>🎓</span> Faculty</a>
+                    <a href="#" class="sidebar-link"><span>🏢</span> Services</a>
+                </nav>
+            </aside>
+
+            <!-- Main Content Area -->
+            <main class="main-content">
+                <div class="student-hero animate-fade">
+                    <img id="heroAvatar" src="" class="student-profile-img" alt="Student">
+                    <div style="flex: 1;">
+                        <span style="font-size: 0.75rem; font-weight: 800; letter-spacing: 2px; opacity: 0.8;">OFFICIAL ACADEMIC PORTFOLIO</span>
+                        <h1 id="studentName" style="font-size: 3rem; font-weight: 800; margin-top: 4px;">Loading Profile...</h1>
+                        <div style="display: flex; gap: 1.5rem; margin-top: 1.2rem; align-items: center; font-weight: 600;">
+                            <span id="studentDept">Department Name</span>
+                            <span id="studentId">ID: Loading...</span>
+                        </div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-size: 0.8rem; font-weight: 700; margin-bottom: 8px;">CUMULATIVE GPA</div>
+                        <div id="studentGpa" style="font-size: 3rem; font-weight: 900;">0.00</div>
+                    </div>
+                </div>
+
+                <div class="academic-grid">
+                    <!-- Left Column: Competencies -->
+                    <div class="card p-2">
+                        <h2 style="color: var(--primary); font-weight: 800; margin-bottom: 2rem;">Competency & Skills</h2>
+                        <div id="skillsList">
+                            <!-- Populated by JS -->
+                        </div>
+                        <div class="mt-2" style="background: var(--hover-bg); padding: 1.5rem; border-radius: 16px; border: 1px dashed var(--accent);">
+                             <h4 style="font-size: 0.8rem; color: var(--primary); font-weight: 800; margin-bottom: 8px;">ACADEMIC INSIGHT</h4>
+                             <p style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.6;">Your technical mastery in "Software Engineering" has increased by 14% this semester. Keep focusing on Advanced Analytics.</p>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Performance Logs -->
+                    <div class="card p-2">
+                         <h2 style="color: var(--primary); font-weight: 800; margin-bottom: 2rem;">Academic Record Timeline</h2>
+                         <div id="performanceLogs">
+                             <!-- Populated by JS -->
+                         </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script type="module" src="student.js"></script>
+</body>
+</html>

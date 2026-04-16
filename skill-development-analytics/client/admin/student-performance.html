@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaaS Analytics | Sharda University</title>
+    <link rel="stylesheet" href="../shared/styles.css">
+    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="student-profile.css">
+</head>
+
+<body>
+    <div class="app-wrapper">
+        <!-- Unified Elite Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <div style="background: white; padding: 6px; border-radius: 12px; display: flex; align-items: center; justify-content: center; width: 48px; height: 48px;">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRanoTorq6EsCL3aZtGb3-G-s5OVlgNnN4stg&s" style="max-width: 100%; height: auto; border-radius: 4px;">
+                </div>
+                <div>
+                   <div style="font-size: 1.2rem; line-height: 1; font-weight: 800;">SHARDA</div>
+                   <div style="font-size: 0.7rem; opacity: 0.5; letter-spacing: 2px; font-weight: 700;">SKILLS</div>
+                </div>
+            </div>
+            
+            <nav style="flex: 1;">
+                <div class="nav-category">Institutional core</div>
+                <a href="/admin/index.html" class="sidebar-link"><span>📊</span> Analytics Hub</a>
+
+                <div class="nav-category">Management</div>
+                <a href="/admin/students.html" class="sidebar-link"><span>🎓</span> Student Audit <span class="badge">125</span></a>
+                <a href="#" class="sidebar-link"><span>📁</span> Skill Dossiers</a>
+
+                <div class="nav-category">Analytics deep-dive</div>
+                <a href="#" class="sidebar-link"><span>📡</span> Live Metrics</a>
+                <a href="#" class="sidebar-link"><span>🗺️</span> Skill Map</a>
+            </nav>
+
+            <!-- Sidebar Widget -->
+            <div class="sidebar-widget">
+                <div style="font-size: 0.65rem; font-weight: 800; color: rgba(255,255,255,0.4); margin-bottom: 12px; text-transform: uppercase;">Batch Health</div>
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                    <span style="font-size: 0.8rem; font-weight: 800;"><span class="pulse-icon"></span> Optimizing</span>
+                    <span style="font-size: 0.8rem; font-weight: 800; color: var(--success);">94.2%</span>
+                </div>
+                <div style="height: 4px; background: rgba(255,255,255,0.05); border-radius: 2px; overflow: hidden;">
+                    <div style="width: 94%; height: 100%; background: var(--success);"></div>
+                </div>
+            </div>
+
+            <div style="padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.05);">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop" style="width: 36px; height: 36px; border-radius: 10px;">
+                    <div>
+                        <div style="font-size: 0.75rem; font-weight: 800;">Dr. Sarah Chen</div>
+                        <div style="font-size: 0.6rem; color: rgba(255,255,255,0.4); font-weight: 700;">PROVOST ADMIN</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Workspace -->
+        <div class="main-container">
+            <header class="top-header">
+                <div class="search-bar">
+                    <span>🔍</span>
+                    <input type="text" placeholder="Global analytic search...">
+                </div>
+                <div style="display: flex; align-items: center; gap: 2rem;">
+                    <a href="students.html" class="btn btn-secondary" style="font-weight: 800; font-size: 0.75rem;">←
+                        BACK TO RECORDS</a>
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop"
+                        class="user-avatar" alt="User">
+                </div>
+            </header>
+
+            <main class="main-content" id="performanceContent">
+                <!-- Data will be injected here by performance.js -->
+                <div style="text-align: center; padding: 10rem;">
+                    <h2 style="color: var(--primary);">INITIALIZING SAAS PERFORMANCE CLOUD...</h2>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script type="module" src="performance.js"></script>
+
+    <!-- Permanent Diagnostic Modals (Moved from JS for Stability) -->
+    <div id="assessmentsModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); backdrop-filter: blur(12px); z-index: 10000; align-items: center; justify-content: center;">
+        <div class="card" id="assessmentsModalContainer" style="width: 90%; max-width: 600px; max-height: 80vh; overflow-y: auto; padding: 2.5rem; animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);">
+            <!-- Content injected via JS -->
+        </div>
+    </div>
+
+    <div id="resumeModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(16px); z-index: 10001; align-items: center; justify-content: center;">
+        <div class="card" id="resumeModalContainer" style="width: 90%; max-width: 650px; max-height: 85vh; overflow-y: auto; padding: 4rem; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.4);">
+             <!-- Content injected via JS -->
+        </div>
+    </div>
+
+    <div id="weeklyTestModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(20px); z-index: 10002; align-items: center; justify-content: center;">
+        <div class="card" id="wtModalContainer" style="width: 95%; max-width: 950px; max-height: 85vh; overflow-y: auto; padding: 4rem;">
+            <!-- Content injected via JS -->
+        </div>
+    </div>
+
+    <div id="assessmentDetailModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(25px); z-index: 10005; align-items: center; justify-content: center;">
+        <div class="card" id="assessmentDetailContainer" style="width: 90%; max-width: 850px; max-height: 85vh; overflow-y: auto; padding: 4rem;">
+            <!-- Content injected via JS -->
+        </div>
+    </div>
+
+    <div id="videoModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(20px); z-index: 10003; align-items: center; justify-content: center;">
+        <div class="card" style="width: 90%; max-width: 800px; padding: 2rem; background: #0f172a;">
+            <div class="flex-between mb-2">
+                <h2 id="videoModalTitle" style="color: white; font-weight: 900;">Session Recording</h2>
+                <button id="closeVideoModal" style="background: rgba(255,255,255,0.1); color: white; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer;">✕</button>
+            </div>
+            <div style="aspect-ratio: 16/9; background: black; border-radius: 12px; overflow: hidden; margin-top: 1rem;">
+                <video id="playerNode" controls style="width: 100%; height: 100%;"></video>
+            </div>
+        </div>
+    </div>
+
+    <div id="uploadModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); backdrop-filter: blur(15px); z-index: 10004; align-items: center; justify-content: center;">
+        <div class="card" style="width: 90%; max-width: 450px; padding: 3rem; text-align: center;">
+            <div style="font-size: 3rem; margin-bottom: 1.5rem;">☁️</div>
+            <h2 style="font-weight: 950; color: var(--primary); margin-bottom: 0.5rem;">Upload Performance</h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 2.5rem;">Select a file to attach to this student's log.</p>
+            <div style="border: 2px dashed #e2e8f0; border-radius: 20px; padding: 3rem; margin-bottom: 2rem; cursor: pointer;">
+                <div style="font-weight: 800; color: #64748b;">Drop File Here</div>
+            </div>
+            <button class="btn btn-primary" style="width: 100%;">Select Files</button>
+            <button id="closeUploadModal" style="background: none; border: none; color: #94a3b8; font-weight: 800; margin-top: 1.5rem; cursor: pointer;">Cancel</button>
+        </div>
+    </div>
+
+    <div id="spectrumDetailModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(20px); z-index: 10006; align-items: center; justify-content: center;">
+        <div class="card" id="spectrumDetailContainer" style="width: 95%; max-width: 1000px; max-height: 85vh; overflow-y: auto; padding: 4rem;">
+            <!-- Content injected via JS -->
+        </div>
+    </div>
+</body>
+
+</html>
